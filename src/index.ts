@@ -2,6 +2,7 @@ import queryString from "query-string";
 import { Queries, SaweriaDonation, Settings } from "./types";
 import { startAudioVisual, stopAudioVisual } from "./utils/audioVisual";
 import startDelay from "./utils/delay";
+import obsDetector from "./utils/obsDetector";
 import {
   playOpeningRadio,
   playTtsFrom,
@@ -189,4 +190,13 @@ if (status && status == "ready") {
     }
   };
   setTheme();
+
+  const isOBS: boolean = obsDetector();
+  if (isOBS) {
+    hideRadio();
+    if (startButton && startButton.classList.contains("hidden") == false) {
+      startButton.classList.add("hidden");
+    }
+    startF1Notif();
+  }
 }
