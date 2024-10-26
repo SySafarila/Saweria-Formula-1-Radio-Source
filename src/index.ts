@@ -3,7 +3,9 @@ import { Queries, SaweriaDonation, Settings } from "./types";
 import { startAudioVisual, stopAudioVisual } from "./utils/audioVisual";
 import startDelay from "./utils/delay";
 import {
+  donationFontSizeInputListener,
   driverNameInputListener,
+  driverRadioFontSizeInputListener,
   hideForm,
   hideStartButton,
   openingRadioSoundSampleListener,
@@ -129,6 +131,10 @@ startButtonTrigger();
 
 // start team selector
 teamSelector();
+
+// font setting
+donationFontSizeInputListener();
+driverRadioFontSizeInputListener();
 
 if (status && status == "ready") {
   themeSelector();

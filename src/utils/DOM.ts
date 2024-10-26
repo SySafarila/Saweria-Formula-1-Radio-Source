@@ -14,6 +14,8 @@ const {
   driverName,
   status,
   teams,
+  donationFontSizeInput,
+  driverRadioFontSizeInput,
 } = parsed;
 
 const startButton: HTMLElement = document.getElementById("startButton");
@@ -124,5 +126,88 @@ export const openingRadioSoundSampleListener = () => {
       e.preventDefault();
       playOpeningRadio();
     });
+  }
+};
+
+export const donationFontSizeInputListener = () => {
+  const input = document.getElementById(
+    "donationFontSizeInput"
+  ) as HTMLInputElement;
+  const donationFrom = document.querySelector("#radio #donation");
+  const donationMessage = document.querySelector("#radio #message");
+
+  if (input) {
+    input.addEventListener("keyup", (e) => {
+      e.preventDefault();
+
+      if (donationFrom) {
+        donationFrom.setAttribute("style", `font-size: ${input.value}px;`);
+      }
+      if (donationMessage) {
+        donationMessage.setAttribute("style", `font-size: ${input.value}px;`);
+      }
+    });
+  }
+
+  if (donationFontSizeInput) {
+    if (donationFrom) {
+      donationFrom.setAttribute(
+        "style",
+        `font-size: ${donationFontSizeInput}px;`
+      );
+    }
+    if (donationMessage) {
+      donationMessage.setAttribute(
+        "style",
+        `font-size: ${donationFontSizeInput}px;`
+      );
+    }
+  }
+};
+
+export const driverRadioFontSizeInputListener = () => {
+  const input = document.getElementById(
+    "driverRadioFontSizeInput"
+  ) as HTMLInputElement;
+  const driver = document.querySelector("#radio #driver-name");
+  const driverRadio = document.querySelector("#radio #driver-radio");
+  const teamConstructors = document.querySelectorAll("#radio #constructor");
+
+  if (input) {
+    input.addEventListener("keyup", (e) => {
+      e.preventDefault();
+
+      if (driver) {
+        driver.setAttribute("style", `font-size: ${input.value}px;`);
+      }
+      if (driverRadio) {
+        driverRadio.setAttribute("style", `font-size: ${input.value}px;`);
+      }
+      if (teamConstructors) {
+        teamConstructors.forEach((teamConstructor) => {
+          teamConstructor.setAttribute("style", `height: ${input.value}px;`);
+        });
+      }
+    });
+  }
+
+  if (input) {
+    if (driver) {
+      driver.setAttribute("style", `font-size: ${driverRadioFontSizeInput}px;`);
+    }
+    if (driverRadio) {
+      driverRadio.setAttribute(
+        "style",
+        `font-size: ${driverRadioFontSizeInput}px;`
+      );
+    }
+    if (teamConstructors) {
+      teamConstructors.forEach((teamConstructor) => {
+        teamConstructor.setAttribute(
+          "style",
+          `height: ${driverRadioFontSizeInput}px;`
+        );
+      });
+    }
   }
 };

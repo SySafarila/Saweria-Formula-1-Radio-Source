@@ -54,4 +54,6 @@ export type Queries = {
     | "williams"
     | "alpine"
     | "sauber";
+  donationFontSizeInput?: number;
+  driverRadioFontSizeInput?: number;
 };

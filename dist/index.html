@@ -51,6 +51,32 @@
         />
       </div>
       <div class="flex flex-col gap-1">
+        <label for="donationFontSizeInput">Donation Font Size (PX)</label>
+        <input
+          type="number"
+          name="donationFontSizeInput"
+          id="donationFontSizeInput"
+          class="border border-black rounded px-5 py-3"
+          min="1"
+          value="20"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="driverRadioFontSizeInput"
+          >Driver Radio Font Size (PX)</label
+        >
+        <input
+          type="number"
+          name="driverRadioFontSizeInput"
+          id="driverRadioFontSizeInput"
+          class="border border-black rounded px-5 py-3"
+          min="1"
+          value="36"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-1">
         <label for="teams">Teams</label>
         <select
           name="teams"
@@ -134,7 +160,8 @@
           rel="noopener noreferrer"
           class="text-blue-500 underline hover:text-blue-600"
           >@sysafarila</a
-        > | v1.1.0</small
+        >
+        | v1.1.0</small
       >
       <button
         type="submit"
@@ -152,9 +179,9 @@
 
     <div class="ferrari" id="radio">
       <div class="bg-driver">
-        <div class="flex flex-col items-end w-full p-4">
+        <div class="flex flex-col items-end w-full p-4 gap-2">
           <span
-            class="uppercase font-f1-bold font-bold text-4xl italic break-words text-right"
+            class="uppercase font-f1-bold font-bold text-4xl italic break-words text-right leading-none"
             id="driver-name"
             >Syahrul</span
           >
@@ -220,7 +247,8 @@
               data-constructor="sauber"
             />
             <span
-              class="uppercase text-white font-f1-bold font-bold -mt-[6px] text-4xl italic text-right break-words"
+              class="uppercase text-white font-f1-bold font-bold -mt-[6px] text-4xl italic text-right break-words leading-none"
+              id="driver-radio"
               >Radio</span
             >
           </div>
@@ -247,13 +275,13 @@
       </div>
       <div class="bg-message flex flex-col gap-4">
         <p
-          class="uppercase text-left text-white text-xl italic p-4 pb-0 font-semibold break-words w-[80%] mr-auto"
+          class="uppercase text-left text-white text-xl italic p-4 pb-0 font-semibold break-words w-[80%] mr-auto leading-none"
           id="donation"
         >
           "Someguy Rp 70,000"
         </p>
         <p
-          class="uppercase text-right text-xl italic p-4 pt-0 font-semibold break-words w-[80%] ml-auto"
+          class="uppercase text-right text-xl italic p-4 pt-0 font-semibold break-words w-[80%] ml-auto leading-none"
           id="message"
         >
           "Man, the aplhatauri is such an idiot"
