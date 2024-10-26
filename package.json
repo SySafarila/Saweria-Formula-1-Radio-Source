@@ -4,8 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx tailwindcss -i ./src/style.css -o ./dist/style.css --watch",
-    "build": "npx tailwindcss -i ./src/style.css -o ./dist/style.css --minify && npm run bundle",
-    "bundle": "npx webpack --config webpack.config.js"
+    "build:tailwind": "npx tailwindcss -i ./src/style.css -o ./dist/style.css --minify",
+    "build": "npm run build:tailwind && npm run build:typescript",
+    "build:typescript": "npx webpack --config webpack.config.js"
   },
   "keywords": [],
   "author": "Syahrul Safarila",

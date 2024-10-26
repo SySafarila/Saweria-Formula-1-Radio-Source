@@ -2,6 +2,16 @@ import queryString from "query-string";
 import { Queries, SaweriaDonation, Settings } from "./types";
 import { startAudioVisual, stopAudioVisual } from "./utils/audioVisual";
 import startDelay from "./utils/delay";
+import {
+  driverNameInputListener,
+  hideForm,
+  hideStartButton,
+  openingRadioSoundSampleListener,
+  startButtonTrigger,
+  streamKeyInputListener,
+  teamSelector,
+  themeSelector,
+} from "./utils/DOM";
 import obsDetector from "./utils/obsDetector";
 import {
   playOpeningRadio,
@@ -100,103 +110,34 @@ export const startF1Notif = () => {
   });
 };
 
-const driverNameInput = document.getElementById(
-  "driverNameInput"
-) as HTMLInputElement;
-const streamKeyInput = document.getElementById(
-  "streamKeyInput"
-) as HTMLInputElement;
-const driverNameEl: HTMLElement = document.getElementById("driver-name");
+// DOM
 
-if (driverNameInput) {
-  driverNameInput.addEventListener("keyup", (e) => {
-    e.preventDefault();
+// Driver name input listener
+driverNameInputListener();
 
-    if (driverNameEl) {
-      driverNameEl.innerText = driverNameInput.value;
-    }
-  });
-}
+// streamKey input listener
+streamKeyInputListener();
 
-if (driverNameEl) {
-  driverNameEl.innerText = settings.driverName ?? "Denaldi";
-}
-if (driverName && driverNameInput) {
-  driverNameInput.value = settings.driverName ?? "Denaldi";
-}
-if (streamKeyInput && streamKey) {
-  streamKeyInput.value = settings.streamKey;
-}
-const formSetting = document.getElementById("formSetting");
-if (
-  formSetting &&
-  status == "ready" &&
-  formSetting.classList.contains("hidden") == false
-) {
-  formSetting.classList.add("hidden");
-}
+// hide form
+hideForm();
 
-const openingRadioSoundExample = document.getElementById(
-  "openingRadioSoundExample"
-);
-if (openingRadioSoundExample) {
-  openingRadioSoundExample.addEventListener("click", (e) => {
-    e.preventDefault();
-    playOpeningRadio();
-  });
-}
+// opening radio sound sample listener
+openingRadioSoundSampleListener();
 
-const startButton: HTMLElement = document.getElementById("startButton");
-if (startButton) {
-  if (status != "ready") {
-    if (startButton.classList.contains("hidden") == false) {
-      startButton.classList.add("hidden");
-    }
-  }
-  startButton.addEventListener("click", (e) => {
-    const radioEl = document.getElementById("radio");
-    e.preventDefault();
-    startF1Notif();
-    if (radioEl && !radioEl.classList.contains("hidden")) {
-      radioEl.classList.add("hidden");
-    }
-    startButton.classList.add("hidden");
-  });
-}
+// for non-OBS client
+startButtonTrigger();
 
-const teamSelector = document.getElementById("teams") as HTMLInputElement;
-if (teamSelector) {
-  teamSelector.addEventListener("change", (e) => {
-    e.preventDefault();
-    const radioEl = document.getElementById("radio");
-    if (radioEl) {
-      radioEl.classList.forEach((className) => {
-        radioEl.classList.remove(className);
-      });
-      radioEl.classList.add(teamSelector.value);
-    }
-    console.log(teamSelector.value);
-  });
-}
+// start team selector
+teamSelector();
 
 if (status && status == "ready") {
-  const setTheme = () => {
-    const radioEl = document.getElementById("radio");
-    if (radioEl) {
-      radioEl.classList.forEach((className) => {
-        radioEl.classList.remove(className);
-      });
-      radioEl.classList.add(teams);
-    }
-  };
-  setTheme();
+  themeSelector();
 
+  // OBS Detector
   const isOBS: boolean = obsDetector();
   if (isOBS) {
     hideRadio();
-    if (startButton && startButton.classList.contains("hidden") == false) {
-      startButton.classList.add("hidden");
-    }
+    hideStartButton();
     startF1Notif();
   }
 }
