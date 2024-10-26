@@ -1,0 +1,23 @@
+{
+  "name": "saweria-tts-listener",
+  "version": "1.0.5",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/style.css -o ./dist/style.css --watch",
+    "build": "npx tailwindcss -i ./src/style.css -o ./dist/style.css --minify && npm run bundle",
+    "bundle": "npx webpack --config webpack.config.js"
+  },
+  "keywords": [],
+  "author": "Syahrul Safarila",
+  "license": "ISC",
+  "description": "Saweria.co Unofficial Formula 1 Text-to-speech",
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "query-string": "^9.1.1",
+    "tailwindcss": "^3.4.14",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.3",
+    "webpack-cli": "^5.1.4"
+  }
+}

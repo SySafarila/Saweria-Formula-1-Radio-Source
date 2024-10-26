@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Saweria Formula 1</title>
+  </head>
+  <body>
+    <form
+      action=""
+      method="get"
+      id="formSetting"
+      class="m-2 flex flex-col gap-2"
+    >
+      <input type="hidden" name="status" value="ready" />
+      <div class="flex flex-col gap-1">
+        <label for="driverNameInput">Driver Name</label>
+        <input
+          type="text"
+          name="driverName"
+          id="driverNameInput"
+          class="border border-black rounded px-5 py-3"
+          placeholder="Driver Name"
+          value="Denaldi"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="streamKeyInput">Saweria URL for OBS</label>
+        <input
+          type="url"
+          name="streamKey"
+          id="streamKeyInput"
+          class="border border-black rounded px-5 py-3"
+          placeholder="Example: https://saweria.co/widgets/alert?streamKey=a4cb06bb44033504e163d68c0d66fxxx"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="showMessageTime">Message Show Time (Second)</label>
+        <input
+          type="number"
+          name="showMessageTime"
+          id="showMessageTime"
+          class="border border-black rounded px-5 py-3"
+          placeholder="5"
+          min="1"
+          value="5"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="teams">Teams</label>
+        <select
+          name="teams"
+          id="teams"
+          class="border-black border rounded px-5 py-3"
+        >
+          <option class="capitalize" value="ferrari">Ferrari</option>
+          <option class="capitalize" value="mercedes">Mercedes</option>
+          <option class="capitalize" value="redbull">Red Bull</option>
+          <option class="capitalize" value="mclaren">Mclaren</option>
+          <option class="capitalize" value="aston-martin">Aston Martin</option>
+          <option class="uppercase" value="haas">HAAS</option>
+          <option class="uppercase" value="rb">VCARB</option>
+          <option class="capitalize" value="williams">Williams</option>
+          <option class="capitalize" value="alpine">Alpine</option>
+          <option class="capitalize" value="sauber">Kick Sauber</option>
+        </select>
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="openingRadioSoundOption">Opening Radio Sound </label>
+        <div class="flex items-center gap-2">
+          <input
+            type="radio"
+            name="openingRadioSound"
+            id="openingRadioSoundInputOn"
+            class="border border-black rounded px-5 py-3"
+            value="on"
+            required
+            checked
+          />
+          <label for="openingRadioSoundInputOn">On</label>
+          <span
+            id="openingRadioSoundExample"
+            class="cursor-pointer underline text-blue-500 hover:text-blue-600"
+            >Play Sound</span
+          >
+        </div>
+        <div class="flex items-center gap-2">
+          <input
+            type="radio"
+            name="openingRadioSound"
+            id="openingRadioSoundInputOff"
+            class="border border-black rounded px-5 py-3"
+            value="off"
+            required
+          />
+          <label for="openingRadioSoundInputOff">Off</label>
+        </div>
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="radioEffect">Radio Voice Effect</label>
+        <div class="flex items-center gap-2">
+          <input
+            type="radio"
+            name="radioVoiceEffect"
+            id="radioEffectOn"
+            class="border border-black rounded px-5 py-3"
+            value="on"
+            required
+            checked
+          />
+          <label for="radioEffectOn">On</label>
+        </div>
+        <div class="flex items-center gap-2">
+          <input
+            type="radio"
+            name="radioVoiceEffect"
+            id="radioEffectOff"
+            class="border border-black rounded px-5 py-3"
+            value="off"
+            required
+          />
+          <label for="radioEffectOff">Off</label>
+        </div>
+      </div>
+      <small
+        >Created by
+        <a
+          href="http://instagram.com/sysafarila"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-blue-500 underline hover:text-blue-600"
+          >@sysafarila</a
+        ></small
+      >
+      <button
+        type="submit"
+        class="px-5 py-3 bg-green-500 text-white rounded hover:bg-green-600"
+      >
+        Finish Config
+      </button>
+    </form>
+    <button
+      class="bg-green-500 text-white px-5 py-3 hover:bg-green-600 m-2"
+      id="startButton"
+    >
+      Start F1 Radio!
+    </button>
+
+    <div class="ferrari" id="radio">
+      <div class="bg-driver">
+        <div class="flex flex-col items-end w-full p-4">
+          <span
+            class="uppercase font-f1-bold font-bold text-4xl italic break-words text-right"
+            id="driver-name"
+            >Syahrul</span
+          >
+          <div class="flex items-center gap-x-2 w-full justify-end">
+            <img
+              src="./images/ferrari-ges.svg"
+              alt="Ferrari"
+              id="constructor"
+              data-constructor="ferrari"
+            />
+            <img
+              src="./images/mercedes.svg"
+              alt="Mercedes"
+              id="constructor"
+              data-constructor="mercedes"
+            />
+            <img
+              src="./images/redbull.svg"
+              alt="Red Bull"
+              id="constructor"
+              data-constructor="redbull"
+            />
+            <img
+              src="./images/mclaren.svg"
+              alt="Mclaren"
+              id="constructor"
+              data-constructor="mclaren"
+            />
+            <img
+              src="./images/aston-martin.svg"
+              alt="Aston Martin"
+              id="constructor"
+              data-constructor="aston-martin"
+            />
+            <img
+              src="./images/haas.svg"
+              alt="HAAS"
+              id="constructor"
+              data-constructor="haas"
+            />
+            <img
+              src="./images/rb.svg"
+              alt="Racing Bull"
+              id="constructor"
+              data-constructor="rb"
+            />
+            <img
+              src="./images/williams.svg"
+              alt="Williams"
+              id="constructor"
+              data-constructor="williams"
+            />
+            <img
+              src="./images/alpine.svg"
+              alt="Alpine"
+              id="constructor"
+              data-constructor="alpine"
+            />
+            <img
+              src="./images/sauber.svg"
+              alt="Sauber"
+              id="constructor"
+              data-constructor="sauber"
+            />
+            <span
+              class="uppercase text-white font-f1-bold font-bold -mt-[6px] text-4xl italic text-right break-words"
+              >Radio</span
+            >
+          </div>
+        </div>
+        <div
+          class="audio-visual flex justify-between pb-2 px-4 items-end gap-4"
+          id="audio-visual"
+        >
+          <div class="transition-all" id="h-1"></div>
+          <div class="transition-all" id="h-2"></div>
+          <div class="transition-all" id="h-3"></div>
+          <div class="transition-all" id="h-4"></div>
+          <div class="transition-all" id="h-5"></div>
+          <div class="transition-all" id="h-6"></div>
+          <div class="transition-all" id="h-7"></div>
+          <div class="transition-all" id="h-8"></div>
+          <div class="transition-all" id="h-9"></div>
+          <div class="transition-all" id="h-10"></div>
+          <div class="transition-all" id="h-11"></div>
+          <div class="transition-all" id="h-12"></div>
+          <div class="transition-all" id="h-13"></div>
+        </div>
+        <hr class="border-t-2 pb-2" />
+      </div>
+      <div class="bg-message flex flex-col gap-4">
+        <p
+          class="uppercase text-left text-white text-xl italic p-4 pb-0 font-semibold break-words w-[80%] mr-auto"
+          id="donation"
+        >
+          "Someguy Rp 70,000"
+        </p>
+        <p
+          class="uppercase text-right text-xl italic p-4 pt-0 font-semibold break-words w-[80%] ml-auto"
+          id="message"
+        >
+          "Man, the aplhatauri is such an idiot"
+        </p>
+      </div>
+    </div>
+
+    <script src="./bundle.js"></script>
+  </body>
+</html>
