@@ -79,7 +79,10 @@ export const startQueue = async () => {
 
   let customSaweriaNotifUrl: string | undefined = undefined;
   const customSaweriaNotifObject = queues[0].sound;
-  if (customSaweriaNotifObject) {
+  if (
+    customSaweriaNotifObject &&
+    typeof customSaweriaNotifObject === "object"
+  ) {
     const soundKeys = Object.keys(customSaweriaNotifObject);
     soundKeys.forEach((key) => {
       const soundUrl: string = customSaweriaNotifObject[key];
