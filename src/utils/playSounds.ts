@@ -1,4 +1,5 @@
 import { settings } from "..";
+import cashRegister from "./base64CashRegister";
 import radio from "./base64Radio";
 import makeRadioEffect from "./makeRadioEffect";
 
@@ -40,6 +41,36 @@ export const playOpeningRadio = () => {
   return new Promise((resolve, reject) => {
     try {
       const sound = new Audio(`data:audio/wav;base64,${radio}`);
+      sound.volume = settings.openingRadioVolume;
+      sound.play();
+      sound.addEventListener("pause", () => {
+        resolve("Success!");
+      });
+    } catch (error) {
+      reject("Failed!");
+    }
+  });
+};
+
+export const playCashRegister = () => {
+  return new Promise((resolve, reject) => {
+    try {
+      const sound = new Audio(`data:audio/wav;base64,${cashRegister}`);
+      sound.volume = settings.openingRadioVolume;
+      sound.play();
+      sound.addEventListener("pause", () => {
+        resolve("Success!");
+      });
+    } catch (error) {
+      reject("Failed!");
+    }
+  });
+};
+
+export const playCustomSaweriaNotif = (url: string) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const sound = new Audio(url);
       sound.volume = settings.openingRadioVolume;
       sound.play();
       sound.addEventListener("pause", () => {

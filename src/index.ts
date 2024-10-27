@@ -19,6 +19,8 @@ import {
 } from "./utils/DOM";
 import obsDetector from "./utils/obsDetector";
 import {
+  playCashRegister,
+  playCustomSaweriaNotif,
   playOpeningRadio,
   playTtsFrom,
   playTtsMessage,
@@ -75,28 +77,55 @@ const deletePlayedQueue = (): void => {
 export const startQueue = async () => {
   isPlaying = true;
 
+  let customSaweriaNotifUrl: string | undefined = undefined;
+  const customSaweriaNotifObject = queues[0].sound;
+  if (customSaweriaNotifObject) {
+    const soundKeys = Object.keys(customSaweriaNotifObject);
+    soundKeys.forEach((key) => {
+      const soundUrl: string = customSaweriaNotifObject[key];
+      customSaweriaNotifUrl = soundUrl;
+    });
+  }
+
   const tts = queues[0].tts;
 
   showRadio(queues[0]);
 
   if (tts) {
+    if (customSaweriaNotifUrl) {
+      await playCustomSaweriaNotif(customSaweriaNotifUrl);
+    } else {
+      await playCashRegister();
+    }
+
     await playTtsFrom(`data:audio/wav;base64,${tts[0]}`);
     startAudioVisual();
+
     if (settings.openingRadioSound == "on") {
       await playOpeningRadio();
     }
+
     await playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
     stopAudioVisual();
     await startDelay(settings.showMessageTime);
     hideRadio();
     await startDelay(1000); // delay 1 detik
   } else {
+    if (customSaweriaNotifUrl) {
+      await playCustomSaweriaNotif(customSaweriaNotifUrl);
+    } else {
+      await playCashRegister();
+    }
+
     startAudioVisual();
+
     if (settings.openingRadioSound == "on") {
       await playOpeningRadio();
     }
+
     await startDelay(settings.showMessageTime);
     stopAudioVisual();
+    await startDelay(1000); // delay 1 detik
     hideRadio();
     await startDelay(1000); // delay 1 detik
   }

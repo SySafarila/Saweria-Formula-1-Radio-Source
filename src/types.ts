@@ -8,6 +8,9 @@ export type SaweriaDonation = {
   is_user: boolean;
   message: string;
   tts?: string[];
+  sound?: {
+    [key: string]: string;
+  };
 };
 
 export type SaweriaMessage = {
