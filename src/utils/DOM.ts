@@ -211,3 +211,47 @@ export const driverRadioFontSizeInputListener = () => {
     }
   }
 };
+
+export const openingRadioVolumeListener = () => {
+  const input = document.getElementById(
+    "openingRadioVolumeInput"
+  ) as HTMLInputElement;
+  const volumeSelected = document.getElementById("openingRadioVolumeSelected");
+
+  if (input && volumeSelected) {
+    input.addEventListener("input", (e) => {
+      e.preventDefault();
+      volumeSelected.innerText = input.value;
+    });
+  }
+};
+
+export const donationFromVolumeListener = () => {
+  const input = document.getElementById(
+    "donationFromVolumeInput"
+  ) as HTMLInputElement;
+  const volumeSelected = document.getElementById("donationFromVolumeSelected");
+
+  if (input && volumeSelected) {
+    input.addEventListener("input", (e) => {
+      e.preventDefault();
+      volumeSelected.innerText = input.value;
+    });
+  }
+};
+
+export const donationMessageVolumeListener = () => {
+  const input = document.getElementById(
+    "donationMessageVolumeInput"
+  ) as HTMLInputElement;
+  const volumeSelected = document.getElementById(
+    "donationMessageVolumeSelected"
+  );
+
+  if (input && volumeSelected) {
+    input.addEventListener("input", (e) => {
+      e.preventDefault();
+      volumeSelected.innerText = input.value;
+    });
+  }
+};

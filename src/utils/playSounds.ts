@@ -6,6 +6,7 @@ export const playTtsFrom = (base64: string) => {
   return new Promise((resolve, reject) => {
     try {
       const sound = new Audio(base64);
+      sound.volume = settings.donationFromVolume;
       sound.play();
       sound.addEventListener("pause", () => {
         resolve("Success!");
@@ -24,6 +25,7 @@ export const playTtsMessage = (base64: string) => {
         const radioEffect = makeRadioEffect(sound);
         radioEffect.resume();
       }
+      sound.volume = settings.donationMessageVolume;
       sound.play();
       sound.addEventListener("pause", () => {
         resolve("Success!");
@@ -38,6 +40,7 @@ export const playOpeningRadio = () => {
   return new Promise((resolve, reject) => {
     try {
       const sound = new Audio(`data:audio/wav;base64,${radio}`);
+      sound.volume = settings.openingRadioVolume;
       sound.play();
       sound.addEventListener("pause", () => {
         resolve("Success!");

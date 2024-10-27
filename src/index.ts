@@ -4,11 +4,14 @@ import { startAudioVisual, stopAudioVisual } from "./utils/audioVisual";
 import startDelay from "./utils/delay";
 import {
   donationFontSizeInputListener,
+  donationFromVolumeListener,
+  donationMessageVolumeListener,
   driverNameInputListener,
   driverRadioFontSizeInputListener,
   hideForm,
   hideStartButton,
   openingRadioSoundSampleListener,
+  openingRadioVolumeListener,
   startButtonTrigger,
   streamKeyInputListener,
   teamSelector,
@@ -42,6 +45,9 @@ const {
   driverName,
   status,
   teams,
+  openingRadioVolume,
+  donationFromVolume,
+  donationMessageVolume,
 } = parsed;
 
 export const settings: Settings = {
@@ -52,6 +58,11 @@ export const settings: Settings = {
   streamKey: streamKey ? streamKeyParser(streamKey) : "your-stream-key",
   driverName: driverName ?? "Denaldi",
   teams: teams ? teams : "ferrari",
+  donationFromVolume: donationFromVolume ? donationFromVolume / 100 : 1,
+  donationMessageVolume: donationMessageVolume
+    ? donationMessageVolume / 100
+    : 1,
+  openingRadioVolume: openingRadioVolume ? openingRadioVolume / 100 : 1,
 };
 
 const deletePlayedQueue = (): void => {
@@ -135,6 +146,15 @@ teamSelector();
 // font setting
 donationFontSizeInputListener();
 driverRadioFontSizeInputListener();
+
+// opening radio volume listener
+openingRadioVolumeListener();
+
+// donation from volume listener
+donationFromVolumeListener();
+
+// donation message volume listener
+donationMessageVolumeListener();
 
 if (status && status == "ready") {
   themeSelector();

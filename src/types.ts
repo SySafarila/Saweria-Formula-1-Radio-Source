@@ -33,6 +33,9 @@ export type Settings = {
     | "williams"
     | "alpine"
     | "sauber";
+  openingRadioVolume: number;
+  donationFromVolume: number;
+  donationMessageVolume: number;
 };
 
 export type Queries = {
@@ -56,4 +59,7 @@ export type Queries = {
     | "sauber";
   donationFontSizeInput?: number;
   driverRadioFontSizeInput?: number;
+  openingRadioVolume?: number;
+  donationFromVolume?: number;
+  donationMessageVolume?: number;
 };
