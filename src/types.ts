@@ -1,3 +1,25 @@
+export type SaweriaMediaShare = {
+  type: "yt" | "tiktok";
+  amount_to_display: number;
+  end: number;
+  id: string;
+  is_nsfw: boolean;
+  start: number;
+};
+
+export type SaweriaSoundBoard = {
+  type: "sb";
+  name: string;
+  fileUrl: string;
+  amount_to_display: number;
+  id: number;
+};
+
+export type SaweriaAlertGif = {
+  tag: "picture";
+  src: string[];
+};
+
 export type SaweriaDonation = {
   amount: number;
   currency: "IDR";
@@ -11,6 +33,7 @@ export type SaweriaDonation = {
   sound?: {
     [key: string]: string;
   };
+  media?: SaweriaMediaShare | SaweriaSoundBoard | SaweriaAlertGif;
 };
 
 export type SaweriaMessage = {

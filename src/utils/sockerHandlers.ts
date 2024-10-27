@@ -1,5 +1,5 @@
 import { isPlaying, queues, socket, startF1Notif, startQueue } from "..";
-import { SaweriaMessage } from "../types";
+import { SaweriaAlertGif, SaweriaMessage } from "../types";
 
 export const socketOpenHandler = () => {
   console.log("Socket opened");
@@ -10,10 +10,15 @@ export const socketMessageHandler = (e: { data: any }) => {
   const donations = donation_json.data;
 
   donations.forEach((donation) => {
-    queues.push(donation);
+    const media = donation.media as SaweriaAlertGif | null;
 
-    if (!isPlaying) {
-      startQueue();
+    // only accept alert donation, not media share or sound board
+    if (media == null || media.tag == "picture") {
+      queues.push(donation);
+
+      if (!isPlaying) {
+        startQueue();
+      }
     }
   });
 };
