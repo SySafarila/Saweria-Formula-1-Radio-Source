@@ -1,7 +1,5 @@
 import queryString from "query-string";
-import { Queries, SaweriaDonation, Settings } from "./types";
-import { startAudioVisual, stopAudioVisual } from "./utils/audioVisual";
-import startDelay from "./utils/delay";
+import { Queries, Settings } from "./types";
 import {
   donationFontSizeInputListener,
   donationFromVolumeListener,
@@ -18,24 +16,11 @@ import {
   themeSelector,
 } from "./utils/DOM";
 import obsDetector from "./utils/obsDetector";
-import {
-  playCashRegister,
-  playCustomSaweriaNotif,
-  playOpeningRadio,
-  playTtsFrom,
-  playTtsMessage,
-} from "./utils/playSounds";
-import { hideRadio, showRadio } from "./utils/radio";
-import {
-  socketCloseHandler,
-  socketMessageHandler,
-  socketOpenHandler,
-} from "./utils/sockerHandlers";
+import { hideRadio } from "./utils/radio";
 import streamKeyParser from "./utils/streamKeyParser";
+import { Queue } from "./utils/Queue";
 
-export let isPlaying: boolean = false;
 export let socket: WebSocket;
-export const queues: SaweriaDonation[] = [];
 
 const parsed = queryString.parse(location.search) as Queries;
 const {
@@ -67,78 +52,6 @@ export const settings: Settings = {
   openingRadioVolume: openingRadioVolume ? openingRadioVolume / 100 : 1,
 };
 
-const deletePlayedQueue = (): void => {
-  if (queues.length >= 1) {
-    isPlaying = false;
-    queues.splice(0, 1);
-  }
-};
-
-export const startQueue = async () => {
-  isPlaying = true;
-
-  let customSaweriaNotifUrl: string | undefined = undefined;
-  const customSaweriaNotifObject = queues[0].sound;
-  if (
-    customSaweriaNotifObject &&
-    typeof customSaweriaNotifObject === "object"
-  ) {
-    const soundKeys = Object.keys(customSaweriaNotifObject);
-    soundKeys.forEach((key) => {
-      const soundUrl: string = customSaweriaNotifObject[key];
-      customSaweriaNotifUrl = soundUrl;
-    });
-  }
-
-  const tts = queues[0].tts;
-
-  showRadio(queues[0]);
-
-  if (tts) {
-    if (customSaweriaNotifUrl) {
-      await playCustomSaweriaNotif(customSaweriaNotifUrl);
-    } else {
-      await playCashRegister();
-    }
-
-    await playTtsFrom(`data:audio/wav;base64,${tts[0]}`);
-    startAudioVisual();
-
-    if (settings.openingRadioSound == "on") {
-      await playOpeningRadio();
-    }
-
-    await playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
-    stopAudioVisual();
-    await startDelay(settings.showMessageTime);
-    hideRadio();
-    await startDelay(1000); // delay 1 detik
-  } else {
-    if (customSaweriaNotifUrl) {
-      await playCustomSaweriaNotif(customSaweriaNotifUrl);
-    } else {
-      await playCashRegister();
-    }
-
-    startAudioVisual();
-
-    if (settings.openingRadioSound == "on") {
-      await playOpeningRadio();
-    }
-
-    await startDelay(settings.showMessageTime);
-    stopAudioVisual();
-    await startDelay(1000); // delay 1 detik
-    hideRadio();
-    await startDelay(1000); // delay 1 detik
-  }
-
-  deletePlayedQueue();
-  if (queues.length >= 1) {
-    startQueue();
-  }
-};
-
 export const startF1Notif = () => {
   console.log("Starting F1 Notif");
 
@@ -146,11 +59,13 @@ export const startF1Notif = () => {
     `wss://events.saweria.co/stream?streamKey=${settings.streamKey}`
   );
 
-  socket.addEventListener("open", socketOpenHandler, {
+  const queue = Queue;
+
+  socket.addEventListener("open", queue.onOpen, {
     once: true,
   });
-  socket.addEventListener("message", socketMessageHandler);
-  socket.addEventListener("close", socketCloseHandler, {
+  socket.addEventListener("message", queue.onMessage);
+  socket.addEventListener("close", queue.onClose, {
     once: true,
   });
 };
