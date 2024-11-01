@@ -14,7 +14,7 @@ const {
   driverRadioFontSizeInput,
 } = parsed;
 
-class Dom {
+export default class Dom {
   private intervals: NodeJS.Timeout[] = [];
 
   constructor() {
@@ -309,5 +309,3 @@ class Dom {
     this.intervals = [];
   };
 }
-
-export const DomControl = new Dom();

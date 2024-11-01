@@ -1,7 +1,6 @@
-import { socket, startF1Notif } from "..";
+import { dom, socket, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
 import startDelay from "./delay";
-import { DomControl } from "./DomClass";
 import messageProcessor from "./messageProcessor";
 import numberFormat from "./numberFormat";
 import {
@@ -13,9 +12,7 @@ import {
 } from "./playSounds";
 import { settings } from "./settings";
 
-const dom = DomControl;
-
-class SaweriaQueue {
+export default class SaweriaQueue {
   private isPlaying: boolean = false;
   private queue: SaweriaDonation[] = [];
   private customSaweriaNotifUrl: string | undefined = undefined;
@@ -184,12 +181,8 @@ class SaweriaQueue {
   onClose = (): void => {
     console.log("Socket close");
 
-    socket.removeEventListener("open", this.onOpen, true);
     socket.removeEventListener("message", this.onMessage, true);
-    socket.removeEventListener("close", this.onClose, true);
 
     startF1Notif();
   };
 }
-
-export const Queue = new SaweriaQueue();

@@ -1,15 +1,15 @@
 import queryString from "query-string";
 import { Queries } from "./types";
-import { DomControl } from "./utils/DomClass";
+import Dom from "./utils/DomClass";
 import obsDetector from "./utils/obsDetector";
-import { Queue } from "./utils/Queue";
+import SaweriaQueue from "./utils/Queue";
 import { settings } from "./utils/settings";
-
-export let socket: WebSocket;
 
 const parsed = queryString.parse(location.search) as Queries;
 const { status } = parsed;
-const queue = Queue;
+const queue = new SaweriaQueue();
+export const dom = new Dom();
+export let socket: WebSocket;
 
 export const startF1Notif = () => {
   console.log("Starting F1 Notif");
@@ -28,7 +28,6 @@ export const startF1Notif = () => {
 };
 
 // DOM
-const dom = DomControl;
 
 if (status && status == "ready") {
   dom.themeSelector();
