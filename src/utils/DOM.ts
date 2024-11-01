@@ -8,10 +8,6 @@ import { settings } from "./settings";
 const parsed = queryString.parse(location.search) as Queries;
 const {
   streamKey,
-  showMessageTime,
-  radioVoiceEffectDistortionValue,
-  radioVoiceEffect,
-  openingRadioSound,
   driverName,
   status,
   teams,
