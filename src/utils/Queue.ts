@@ -1,7 +1,7 @@
 import { socket, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
-import { startAudioVisual, stopAudioVisual } from "./audioVisual";
 import startDelay from "./delay";
+import { startAudioVisual, stopAudioVisual } from "./DOM";
 import messageProcessor from "./messageProcessor";
 import numberFormat from "./numberFormat";
 import {
@@ -19,22 +19,18 @@ class SaweriaQueue {
   private customSaweriaNotifUrl: string | undefined = undefined;
 
   constructor() {
-    //
+    console.log("Saweria Queue Init");
   }
 
-  getQueue(): SaweriaDonation[] {
-    return this.queue;
-  }
-
-  getDonation(): SaweriaDonation {
+  private getDonation(): SaweriaDonation {
     return this.queue[0];
   }
 
-  getPlayingStatus(): boolean {
+  private getPlayingStatus(): boolean {
     return this.isPlaying;
   }
 
-  addQueue(donation: SaweriaDonation): void {
+  private addQueue(donation: SaweriaDonation): void {
     this.queue.push(donation);
     if (this.getPlayingStatus() === false) {
       this.startQueue();
@@ -92,7 +88,7 @@ class SaweriaQueue {
     }
   }
 
-  hideRadio() {
+  private hideRadio() {
     const radioEl = document.getElementById("radio");
     if (radioEl && !radioEl.classList.contains("hidden")) {
       radioEl.classList.add("hidden");
@@ -113,37 +109,44 @@ class SaweriaQueue {
     }
   }
 
-  async startQueue() {
+  private async ttsHandler() {
+    const { tts } = this.getDonation();
+
+    await this.playNotif();
+    await playTtsFrom(`data:audio/wav;base64,${tts[0]}`);
+    startAudioVisual();
+    await this.playOpeningRadio();
+    await playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
+    stopAudioVisual();
+    await startDelay(settings.showMessageTime);
+    this.hideRadio();
+    await startDelay(1000); // delay 1 detik
+  }
+
+  private async nonTtsHandler() {
+    await this.playNotif();
+    startAudioVisual();
+    await this.playOpeningRadio();
+    await startDelay(settings.showMessageTime);
+    stopAudioVisual();
+    await startDelay(1000); // delay 1 detik
+    this.hideRadio();
+    await startDelay(1000); // delay 1 detik
+  }
+
+  private async startQueue() {
     console.log(`Showing donation from ${this.getDonation().donator}`);
     const { tts } = this.getDonation();
 
     this.isPlaying = true;
     this.setCustomSaweriaNotif();
-
-    // show donation: start
     this.displayRadio();
 
     if (tts) {
-      await this.playNotif();
-      await playTtsFrom(`data:audio/wav;base64,${tts[0]}`);
-      startAudioVisual();
-      await this.playOpeningRadio();
-      await playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
-      stopAudioVisual();
-      await startDelay(settings.showMessageTime);
-      this.hideRadio();
-      await startDelay(1000); // delay 1 detik
+      await this.ttsHandler();
     } else {
-      await this.playNotif();
-      startAudioVisual();
-      await this.playOpeningRadio();
-      await startDelay(settings.showMessageTime);
-      stopAudioVisual();
-      await startDelay(1000); // delay 1 detik
-      this.hideRadio();
-      await startDelay(1000); // delay 1 detik
+      await this.nonTtsHandler();
     }
-    // show donation: end
 
     this.deletePlayedQueue();
 
@@ -152,7 +155,7 @@ class SaweriaQueue {
     }
   }
 
-  deletePlayedQueue(): void {
+  private deletePlayedQueue(): void {
     if (this.queue.length >= 1) {
       this.isPlaying = false;
       this.queue.splice(0, 1);

@@ -17,6 +17,7 @@ import {
 } from "./utils/DOM";
 import obsDetector from "./utils/obsDetector";
 import { Queue } from "./utils/Queue";
+import { hideRadio } from "./utils/radio";
 import { settings } from "./utils/settings";
 
 export let socket: WebSocket;
@@ -81,7 +82,7 @@ if (status && status == "ready") {
   const isOBS: boolean = obsDetector();
   if (isOBS) {
     // hideRadio();
-    queue.hideRadio();
+    hideRadio();
     hideStartButton();
     startF1Notif();
   }
