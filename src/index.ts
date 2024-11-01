@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import { Queries, Settings } from "./types";
+import { Queries } from "./types";
 import {
   donationFontSizeInputListener,
   donationFromVolumeListener,
@@ -16,41 +16,14 @@ import {
   themeSelector,
 } from "./utils/DOM";
 import obsDetector from "./utils/obsDetector";
-import { hideRadio } from "./utils/radio";
-import streamKeyParser from "./utils/streamKeyParser";
 import { Queue } from "./utils/Queue";
+import { settings } from "./utils/settings";
 
 export let socket: WebSocket;
 
 const parsed = queryString.parse(location.search) as Queries;
-const {
-  streamKey,
-  showMessageTime,
-  radioVoiceEffectDistortionValue,
-  radioVoiceEffect,
-  openingRadioSound,
-  driverName,
-  status,
-  teams,
-  openingRadioVolume,
-  donationFromVolume,
-  donationMessageVolume,
-} = parsed;
-
-export const settings: Settings = {
-  openingRadioSound: openingRadioSound == "on" ? "on" : "off",
-  radioVoiceEffect: radioVoiceEffect == "on" ? true : false,
-  radioVoiceEffectDistortionValue: radioVoiceEffectDistortionValue ?? 200,
-  showMessageTime: showMessageTime ? showMessageTime * 1000 : 5000, // ms
-  streamKey: streamKey ? streamKeyParser(streamKey) : "your-stream-key",
-  driverName: driverName ?? "Denaldi",
-  teams: teams ? teams : "ferrari",
-  donationFromVolume: donationFromVolume ? donationFromVolume / 100 : 1,
-  donationMessageVolume: donationMessageVolume
-    ? donationMessageVolume / 100
-    : 1,
-  openingRadioVolume: openingRadioVolume ? openingRadioVolume / 100 : 1,
-};
+const { status } = parsed;
+const queue = Queue;
 
 export const startF1Notif = () => {
   console.log("Starting F1 Notif");
@@ -58,8 +31,6 @@ export const startF1Notif = () => {
   socket = new WebSocket(
     `wss://events.saweria.co/stream?streamKey=${settings.streamKey}`
   );
-
-  const queue = Queue;
 
   socket.addEventListener("open", queue.onOpen, {
     once: true,
@@ -109,7 +80,8 @@ if (status && status == "ready") {
   // OBS Detector
   const isOBS: boolean = obsDetector();
   if (isOBS) {
-    hideRadio();
+    // hideRadio();
+    queue.hideRadio();
     hideStartButton();
     startF1Notif();
   }

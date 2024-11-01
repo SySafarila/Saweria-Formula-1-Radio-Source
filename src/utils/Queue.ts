@@ -1,7 +1,9 @@
-import { settings, socket, startF1Notif } from "..";
+import { socket, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
 import { startAudioVisual, stopAudioVisual } from "./audioVisual";
 import startDelay from "./delay";
+import messageProcessor from "./messageProcessor";
+import numberFormat from "./numberFormat";
 import {
   playCashRegister,
   playCustomSaweriaNotif,
@@ -9,11 +11,12 @@ import {
   playTtsFrom,
   playTtsMessage,
 } from "./playSounds";
-import { hideRadio, showRadio } from "./radio";
+import { settings } from "./settings";
 
 class SaweriaQueue {
   private isPlaying: boolean = false;
   private queue: SaweriaDonation[] = [];
+  private customSaweriaNotifUrl: string | undefined = undefined;
 
   constructor() {
     //
@@ -23,7 +26,7 @@ class SaweriaQueue {
     return this.queue;
   }
 
-  getWillPlayingDonation(): SaweriaDonation {
+  getDonation(): SaweriaDonation {
     return this.queue[0];
   }
 
@@ -38,15 +41,8 @@ class SaweriaQueue {
     }
   }
 
-  async startQueue() {
-    console.log(
-      `Showing donation from ${this.getWillPlayingDonation().donator}`
-    );
-
-    this.isPlaying = true;
-
-    let customSaweriaNotifUrl: string | undefined = undefined;
-    const customSaweriaNotifObject = this.getWillPlayingDonation().sound;
+  private setCustomSaweriaNotif(): void {
+    const customSaweriaNotifObject = this.getDonation().sound;
     if (
       customSaweriaNotifObject &&
       typeof customSaweriaNotifObject === "object"
@@ -54,51 +50,97 @@ class SaweriaQueue {
       const soundKeys = Object.keys(customSaweriaNotifObject);
       soundKeys.forEach((key) => {
         const soundUrl: string = customSaweriaNotifObject[key];
-        customSaweriaNotifUrl = soundUrl;
+        this.customSaweriaNotifUrl = soundUrl;
       });
     }
+  }
 
-    const tts = this.getWillPlayingDonation().tts;
+  private displayRadio() {
+    const donation = this.getDonation();
+    const radioEl = document.getElementById("radio");
+    if (radioEl) {
+      if (radioEl.classList.contains("hidden")) {
+        const msg = radioEl.querySelector("#message");
+        const dnt = radioEl.querySelector("#donation");
+        if (msg) {
+          msg.innerHTML = messageProcessor(donation.message) ?? "-";
+        }
+        if (dnt) {
+          dnt.innerHTML =
+            messageProcessor(
+              `${donation.donator} ${
+                donation.currency == "IDR" ? "Rp " : donation.currency
+              } ${numberFormat(donation.amount)}`
+            ) ?? "-";
+        }
+        radioEl.classList.remove("hidden");
+      } else {
+        const msg = radioEl.querySelector("#message");
+        const dnt = radioEl.querySelector("#donation");
+        if (msg) {
+          msg.innerHTML = messageProcessor(donation.message) ?? "-";
+        }
+        if (dnt) {
+          dnt.innerHTML =
+            messageProcessor(
+              `${donation.donator} ${
+                donation.currency == "IDR" ? "Rp " : donation.currency
+              } ${numberFormat(donation.amount)}`
+            ) ?? "-";
+        }
+      }
+    }
+  }
+
+  hideRadio() {
+    const radioEl = document.getElementById("radio");
+    if (radioEl && !radioEl.classList.contains("hidden")) {
+      radioEl.classList.add("hidden");
+    }
+  }
+
+  private async playNotif() {
+    if (this.customSaweriaNotifUrl) {
+      await playCustomSaweriaNotif(this.customSaweriaNotifUrl);
+    } else {
+      await playCashRegister();
+    }
+  }
+
+  private async playOpeningRadio() {
+    if (settings.openingRadioSound == "on") {
+      await playOpeningRadio();
+    }
+  }
+
+  async startQueue() {
+    console.log(`Showing donation from ${this.getDonation().donator}`);
+    const { tts } = this.getDonation();
+
+    this.isPlaying = true;
+    this.setCustomSaweriaNotif();
 
     // show donation: start
-    showRadio(this.getWillPlayingDonation());
+    this.displayRadio();
 
     if (tts) {
-      if (customSaweriaNotifUrl) {
-        await playCustomSaweriaNotif(customSaweriaNotifUrl);
-      } else {
-        await playCashRegister();
-      }
-
+      await this.playNotif();
       await playTtsFrom(`data:audio/wav;base64,${tts[0]}`);
       startAudioVisual();
-
-      if (settings.openingRadioSound == "on") {
-        await playOpeningRadio();
-      }
-
+      await this.playOpeningRadio();
       await playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
       stopAudioVisual();
       await startDelay(settings.showMessageTime);
-      hideRadio();
+      this.hideRadio();
       await startDelay(1000); // delay 1 detik
     } else {
-      if (customSaweriaNotifUrl) {
-        await playCustomSaweriaNotif(customSaweriaNotifUrl);
-      } else {
-        await playCashRegister();
-      }
-
+      await this.playNotif();
       startAudioVisual();
-
-      if (settings.openingRadioSound == "on") {
-        await playOpeningRadio();
-      }
-
+      await this.playOpeningRadio();
       await startDelay(settings.showMessageTime);
       stopAudioVisual();
       await startDelay(1000); // delay 1 detik
-      hideRadio();
+      this.hideRadio();
       await startDelay(1000); // delay 1 detik
     }
     // show donation: end
@@ -139,6 +181,8 @@ class SaweriaQueue {
 
   // use arrow function for callback
   onClose = (): void => {
+    console.log("Socket close");
+
     socket.removeEventListener("open", this.onOpen, true);
     socket.removeEventListener("message", this.onMessage, true);
     socket.removeEventListener("close", this.onClose, true);

@@ -1,8 +1,9 @@
 import queryString from "query-string";
-import { settings, startF1Notif } from "..";
+import { startF1Notif } from "..";
 import { Queries } from "../types";
 import { playOpeningRadio } from "./playSounds";
 import { hideRadio } from "./radio";
+import { settings } from "./settings";
 
 const parsed = queryString.parse(location.search) as Queries;
 const {

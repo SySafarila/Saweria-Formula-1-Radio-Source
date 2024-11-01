@@ -1,7 +1,7 @@
-import { settings } from "..";
 import cashRegister from "./base64CashRegister";
 import radio from "./base64Radio";
 import makeRadioEffect from "./makeRadioEffect";
+import { settings } from "./settings";
 
 export const playTtsFrom = (base64: string) => {
   return new Promise((resolve, reject) => {
