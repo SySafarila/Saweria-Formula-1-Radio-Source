@@ -1,9 +1,10 @@
+import { setting } from "..";
 import makeDistortionCurve from "./makeDistortionCurve";
 
 const makeRadioEffect = (audio: HTMLAudioElement): AudioContext => {
   const lowpassValue = 3000;
   const highpassValue = 500;
-  const distortionValue = 200;
+  const distortionValue = setting.radioVoiceEffectDistortionValue ?? 200;
 
   const audioContext = new window.AudioContext();
   const source = audioContext.createMediaElementSource(audio);
