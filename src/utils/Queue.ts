@@ -1,7 +1,7 @@
 import { socket, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
 import startDelay from "./delay";
-import { startAudioVisual, stopAudioVisual } from "./DOM";
+import { DomControl } from "./DomClass";
 import messageProcessor from "./messageProcessor";
 import numberFormat from "./numberFormat";
 import {
@@ -12,6 +12,8 @@ import {
   playTtsMessage,
 } from "./playSounds";
 import { settings } from "./settings";
+
+const dom = DomControl;
 
 class SaweriaQueue {
   private isPlaying: boolean = false;
@@ -110,10 +112,10 @@ class SaweriaQueue {
 
     await this.playNotif();
     await playTtsFrom(`data:audio/wav;base64,${tts[0]}`);
-    startAudioVisual();
+    dom.startAudioVisual();
     await this.playOpeningRadio();
     await playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
-    stopAudioVisual();
+    dom.stopAudioVisual();
     await startDelay(settings.showMessageTime);
     this.hideRadio();
     await startDelay(1000); // delay 1 detik
@@ -121,10 +123,10 @@ class SaweriaQueue {
 
   private async nonTtsHandler() {
     await this.playNotif();
-    startAudioVisual();
+    dom.startAudioVisual();
     await this.playOpeningRadio();
     await startDelay(settings.showMessageTime);
-    stopAudioVisual();
+    dom.stopAudioVisual();
     await startDelay(1000); // delay 1 detik
     this.hideRadio();
     await startDelay(1000); // delay 1 detik

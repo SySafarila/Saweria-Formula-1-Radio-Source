@@ -1,23 +1,8 @@
 import queryString from "query-string";
 import { Queries } from "./types";
-import {
-  donationFontSizeInputListener,
-  donationFromVolumeListener,
-  donationMessageVolumeListener,
-  driverNameInputListener,
-  driverRadioFontSizeInputListener,
-  hideForm,
-  hideStartButton,
-  openingRadioSoundSampleListener,
-  openingRadioVolumeListener,
-  startButtonTrigger,
-  streamKeyInputListener,
-  teamSelector,
-  themeSelector,
-} from "./utils/DOM";
+import { DomControl } from "./utils/DomClass";
 import obsDetector from "./utils/obsDetector";
 import { Queue } from "./utils/Queue";
-import { hideRadio } from "./utils/radio";
 import { settings } from "./utils/settings";
 
 export let socket: WebSocket;
@@ -43,47 +28,16 @@ export const startF1Notif = () => {
 };
 
 // DOM
-
-// Driver name input listener
-driverNameInputListener();
-
-// streamKey input listener
-streamKeyInputListener();
-
-// hide form
-hideForm();
-
-// opening radio sound sample listener
-openingRadioSoundSampleListener();
-
-// for non-OBS client
-startButtonTrigger();
-
-// start team selector
-teamSelector();
-
-// font setting
-donationFontSizeInputListener();
-driverRadioFontSizeInputListener();
-
-// opening radio volume listener
-openingRadioVolumeListener();
-
-// donation from volume listener
-donationFromVolumeListener();
-
-// donation message volume listener
-donationMessageVolumeListener();
+const dom = DomControl;
 
 if (status && status == "ready") {
-  themeSelector();
+  dom.themeSelector();
 
   // OBS Detector
   const isOBS: boolean = obsDetector();
   if (isOBS) {
-    // hideRadio();
-    hideRadio();
-    hideStartButton();
+    dom.hideRadio();
+    dom.hideStartButton();
     startF1Notif();
   }
 }
