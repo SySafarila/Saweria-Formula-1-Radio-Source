@@ -1,7 +1,6 @@
-import { socket, startF1Notif } from "..";
+import { dom, setting, socket, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
 import startDelay from "./delay";
-import { startAudioVisual, stopAudioVisual } from "./DOM";
 import messageProcessor from "./messageProcessor";
 import numberFormat from "./numberFormat";
 import {
@@ -11,9 +10,8 @@ import {
   playTtsFrom,
   playTtsMessage,
 } from "./playSounds";
-import { settings } from "./settings";
 
-class SaweriaQueue {
+export default class SaweriaQueue {
   private isPlaying: boolean = false;
   private queue: SaweriaDonation[] = [];
   private customSaweriaNotifUrl: string | undefined = undefined;
@@ -100,7 +98,7 @@ class SaweriaQueue {
   }
 
   private async playOpeningRadio() {
-    if (settings.openingRadioSound == "on") {
+    if (setting.openingRadioSound == "on") {
       await playOpeningRadio();
     }
   }
@@ -110,21 +108,21 @@ class SaweriaQueue {
 
     await this.playNotif();
     await playTtsFrom(`data:audio/wav;base64,${tts[0]}`);
-    startAudioVisual();
+    dom.startAudioVisual();
     await this.playOpeningRadio();
     await playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
-    stopAudioVisual();
-    await startDelay(settings.showMessageTime);
+    dom.stopAudioVisual();
+    await startDelay(setting.showMessageTime);
     this.hideRadio();
     await startDelay(1000); // delay 1 detik
   }
 
   private async nonTtsHandler() {
     await this.playNotif();
-    startAudioVisual();
+    dom.startAudioVisual();
     await this.playOpeningRadio();
-    await startDelay(settings.showMessageTime);
-    stopAudioVisual();
+    await startDelay(setting.showMessageTime);
+    dom.stopAudioVisual();
     await startDelay(1000); // delay 1 detik
     this.hideRadio();
     await startDelay(1000); // delay 1 detik
@@ -161,6 +159,7 @@ class SaweriaQueue {
   // use arrow function for callback
   onOpen = (): void => {
     console.log("Socket open");
+    socket.send("PING!");
   };
 
   // use arrow function for callback
@@ -182,12 +181,8 @@ class SaweriaQueue {
   onClose = (): void => {
     console.log("Socket close");
 
-    socket.removeEventListener("open", this.onOpen, true);
     socket.removeEventListener("message", this.onMessage, true);
-    socket.removeEventListener("close", this.onClose, true);
 
     startF1Notif();
   };
 }
-
-export const Queue = new SaweriaQueue();
