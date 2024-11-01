@@ -1,4 +1,4 @@
-import { dom, socket, startF1Notif } from "..";
+import { dom, setting, socket, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
 import startDelay from "./delay";
 import messageProcessor from "./messageProcessor";
@@ -10,7 +10,6 @@ import {
   playTtsFrom,
   playTtsMessage,
 } from "./playSounds";
-import { settings } from "./settings";
 
 export default class SaweriaQueue {
   private isPlaying: boolean = false;
@@ -99,7 +98,7 @@ export default class SaweriaQueue {
   }
 
   private async playOpeningRadio() {
-    if (settings.openingRadioSound == "on") {
+    if (setting.openingRadioSound == "on") {
       await playOpeningRadio();
     }
   }
@@ -113,7 +112,7 @@ export default class SaweriaQueue {
     await this.playOpeningRadio();
     await playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
     dom.stopAudioVisual();
-    await startDelay(settings.showMessageTime);
+    await startDelay(setting.showMessageTime);
     this.hideRadio();
     await startDelay(1000); // delay 1 detik
   }
@@ -122,7 +121,7 @@ export default class SaweriaQueue {
     await this.playNotif();
     dom.startAudioVisual();
     await this.playOpeningRadio();
-    await startDelay(settings.showMessageTime);
+    await startDelay(setting.showMessageTime);
     dom.stopAudioVisual();
     await startDelay(1000); // delay 1 detik
     this.hideRadio();
@@ -160,6 +159,7 @@ export default class SaweriaQueue {
   // use arrow function for callback
   onOpen = (): void => {
     console.log("Socket open");
+    socket.send("PING!");
   };
 
   // use arrow function for callback

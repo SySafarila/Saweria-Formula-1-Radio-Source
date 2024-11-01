@@ -3,10 +3,11 @@ import { Queries } from "./types";
 import Dom from "./utils/DomClass";
 import obsDetector from "./utils/obsDetector";
 import SaweriaQueue from "./utils/Queue";
-import { settings } from "./utils/settings";
+import SettingClass from "./utils/SettingClass";
 
 const parsed = queryString.parse(location.search) as Queries;
 const { status } = parsed;
+export const setting = new SettingClass();
 const queue = new SaweriaQueue();
 export const dom = new Dom();
 export let socket: WebSocket;
@@ -15,7 +16,7 @@ export const startF1Notif = () => {
   console.log("Starting F1 Notif");
 
   socket = new WebSocket(
-    `wss://events.saweria.co/stream?streamKey=${settings.streamKey}`
+    `wss://events.saweria.co/stream?streamKey=${setting.streamKey}`
   );
 
   socket.addEventListener("open", queue.onOpen, {

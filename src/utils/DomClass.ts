@@ -1,8 +1,7 @@
 import queryString from "query-string";
-import { startF1Notif } from "..";
+import { startF1Notif, setting } from "..";
 import { Queries } from "../types";
 import { playOpeningRadio } from "./playSounds";
-import { settings } from "./settings";
 
 const parsed = queryString.parse(location.search) as Queries;
 const {
@@ -108,11 +107,11 @@ export default class Dom {
     }
 
     if (driverNameEl) {
-      driverNameEl.innerText = settings.driverName ?? "Denaldi";
+      driverNameEl.innerText = setting.driverName ?? "Denaldi";
     }
 
     if (driverName && driverNameInput) {
-      driverNameInput.value = settings.driverName ?? "Denaldi";
+      driverNameInput.value = setting.driverName ?? "Denaldi";
     }
   }
 
@@ -122,7 +121,7 @@ export default class Dom {
     ) as HTMLInputElement;
 
     if (streamKeyInput && streamKey) {
-      streamKeyInput.value = settings.streamKey;
+      streamKeyInput.value = setting.streamKey;
     }
   }
 
