@@ -26,13 +26,9 @@ class SaweriaQueue {
     return this.queue[0];
   }
 
-  private getPlayingStatus(): boolean {
-    return this.isPlaying;
-  }
-
   private addQueue(donation: SaweriaDonation): void {
     this.queue.push(donation);
-    if (this.getPlayingStatus() === false) {
+    if (this.isPlaying === false) {
       this.startQueue();
     }
   }
