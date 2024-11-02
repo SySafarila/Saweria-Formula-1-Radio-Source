@@ -1,8 +1,6 @@
 import { dom, setting, socket, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
 import startDelay from "./delay";
-import messageProcessor from "./messageProcessor";
-import numberFormat from "./numberFormat";
 import {
   playCashRegister,
   playCustomSaweriaNotif,
@@ -18,6 +16,25 @@ export default class SaweriaQueue {
 
   constructor() {
     console.log("Saweria Queue Init");
+  }
+
+  private messageProcessor(message: string): string {
+    let msg = ``;
+    if (message[0] == `"`) {
+      msg += message;
+    } else {
+      msg += `"${message}`;
+    }
+
+    if (message[message.length - 1] != `"`) {
+      msg += `"`;
+    }
+
+    return msg;
+  }
+
+  private numberFormat(amount: number): string {
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   private getDonation(): SaweriaDonation {
@@ -53,14 +70,14 @@ export default class SaweriaQueue {
         const msg = radioEl.querySelector("#message");
         const dnt = radioEl.querySelector("#donation");
         if (msg) {
-          msg.innerHTML = messageProcessor(donation.message) ?? "-";
+          msg.innerHTML = this.messageProcessor(donation.message) ?? "-";
         }
         if (dnt) {
           dnt.innerHTML =
-            messageProcessor(
+            this.messageProcessor(
               `${donation.donator} ${
                 donation.currency == "IDR" ? "Rp " : donation.currency
-              } ${numberFormat(donation.amount)}`
+              } ${this.numberFormat(donation.amount)}`
             ) ?? "-";
         }
         radioEl.classList.remove("hidden");
@@ -68,14 +85,14 @@ export default class SaweriaQueue {
         const msg = radioEl.querySelector("#message");
         const dnt = radioEl.querySelector("#donation");
         if (msg) {
-          msg.innerHTML = messageProcessor(donation.message) ?? "-";
+          msg.innerHTML = this.messageProcessor(donation.message) ?? "-";
         }
         if (dnt) {
           dnt.innerHTML =
-            messageProcessor(
+            this.messageProcessor(
               `${donation.donator} ${
                 donation.currency == "IDR" ? "Rp " : donation.currency
-              } ${numberFormat(donation.amount)}`
+              } ${this.numberFormat(donation.amount)}`
             ) ?? "-";
         }
       }

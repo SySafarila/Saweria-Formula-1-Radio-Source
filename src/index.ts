@@ -1,7 +1,6 @@
 import queryString from "query-string";
 import { Queries } from "./types";
 import Dom from "./utils/DomClass";
-import obsDetector from "./utils/obsDetector";
 import SaweriaQueue from "./utils/Queue";
 import SettingClass from "./utils/SettingClass";
 
@@ -34,7 +33,7 @@ if (status && status == "ready") {
   dom.themeSelector();
 
   // OBS Detector
-  const isOBS: boolean = obsDetector();
+  const isOBS: boolean = dom.obsDetector();
   if (isOBS) {
     dom.hideRadio();
     dom.hideStartButton();

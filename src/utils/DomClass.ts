@@ -30,6 +30,14 @@ export default class Dom {
     this.donationMessageVolumeListener();
   }
 
+  obsDetector(): boolean {
+    const userAgent = window.navigator.userAgent;
+    if (userAgent.includes("OBS")) {
+      return true;
+    }
+    return false;
+  }
+
   hideStartButton() {
     const startButton: HTMLElement = document.getElementById("startButton");
     if (startButton && startButton.classList.contains("hidden") == false) {
