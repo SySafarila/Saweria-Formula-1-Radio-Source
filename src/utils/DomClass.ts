@@ -1,7 +1,7 @@
 import queryString from "query-string";
-import { startF1Notif, setting } from "..";
+import { setting, startF1Notif } from "..";
 import { Queries } from "../types";
-import { playOpeningRadio } from "./playSounds";
+import Sound from "./Sound";
 
 const parsed = queryString.parse(location.search) as Queries;
 const {
@@ -12,6 +12,8 @@ const {
   donationFontSizeInput,
   driverRadioFontSizeInput,
 } = parsed;
+
+const sound = new Sound();
 
 export default class Dom {
   private intervals: NodeJS.Timeout[] = [];
@@ -151,7 +153,7 @@ export default class Dom {
     if (openingRadioSoundExample) {
       openingRadioSoundExample.addEventListener("click", (e) => {
         e.preventDefault();
-        playOpeningRadio();
+        sound.playOpeningRadio();
       });
     }
   }
