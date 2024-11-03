@@ -1,7 +1,7 @@
 import { dom, socket, sound, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
 import startDelay from "./delay";
-import SettingClass from "./SettingClass";
+import SettingClass from "./Setting";
 
 export default class SaweriaQueue {
   private setting: SettingClass;

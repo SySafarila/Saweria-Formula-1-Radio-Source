@@ -1,7 +1,7 @@
 import { queue } from "..";
 import { cashRegisterSound, incomingRadioSound } from "./base64Audios";
 import { exampleDonation } from "./exampleDonation";
-import SettingClass from "./SettingClass";
+import SettingClass from "./Setting";
 
 export default class Sound {
   private setting: SettingClass;

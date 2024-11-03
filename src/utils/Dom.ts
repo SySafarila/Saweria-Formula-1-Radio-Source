@@ -1,7 +1,7 @@
 import queryString from "query-string";
 import { sound, startF1Notif } from "..";
 import { Queries } from "../types";
-import SettingClass from "./SettingClass";
+import SettingClass from "./Setting";
 
 const parsed = queryString.parse(location.search) as Queries;
 const {

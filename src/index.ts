@@ -1,8 +1,8 @@
 import queryString from "query-string";
 import { Queries } from "./types";
-import Dom from "./utils/DomClass";
+import Dom from "./utils/Dom";
 import SaweriaQueue from "./utils/Queue";
-import SettingClass from "./utils/SettingClass";
+import SettingClass from "./utils/Setting";
 import Sound from "./utils/Sound";
 
 const parsed = queryString.parse(location.search) as Queries;
