@@ -18,27 +18,101 @@ const {
 } = parsed;
 
 export default class SettingClass {
-  streamKey: string = streamKey
-    ? streamKeyParser(streamKey)
-    : "your-stream-key";
-  showMessageTime: number = showMessageTime ? showMessageTime * 1000 : 5000;
-  radioVoiceEffect: boolean = radioVoiceEffect == "on" ? true : false;
-  radioVoiceEffectDistortionValue: number =
-    radioVoiceEffectDistortionValue ?? 200;
-  openingRadioSound: "on" | "off" = openingRadioSound == "on" ? "on" : "off";
-  teams: Queries["teams"] = teams ? teams : "ferrari";
-  driverName: string = driverName ?? "Denaldi";
-  openingRadioVolume: number = openingRadioVolume
-    ? openingRadioVolume / 100
-    : 1;
-  donationFromVolume: number = donationFromVolume
-    ? donationFromVolume / 100
-    : 1;
-  donationMessageVolume: number = donationMessageVolume
-    ? donationMessageVolume / 100
-    : 1;
+  streamKey: string = "your-stream-key";
+  showMessageTime: number = 5000;
+  radioVoiceEffect: boolean = true;
+  radioVoiceEffectDistortionValue: number = 200;
+  openingRadioSound: "on" | "off" = "on";
+  teams: Queries["teams"] = "ferrari";
+  driverName: string = "Denaldi";
+  openingRadioVolume: number = 1;
+  donationFromVolume: number = 1;
+  donationMessageVolume: number = 1;
 
   constructor() {
-    console.log("Setting loaded");
+    this.setStreamKey();
+    this.setShowMessageTime();
+    this.setRadioVoiceEffect();
+    this.setRadioVoiceEffectDistortionValue();
+    this.setIncomingRadioSound();
+    this.setTeam();
+    this.setDriverName();
+    this.setOpeningRadioVolume();
+    this.setDonationFromVolume();
+    this.setDonationMessageVolume();
+    console.log("Setting loaded:");
+  }
+
+  private setStreamKey() {
+    if (streamKey) {
+      this.streamKey = streamKeyParser(streamKey);
+    }
+  }
+
+  private setShowMessageTime() {
+    if (showMessageTime && !isNaN(showMessageTime)) {
+      this.showMessageTime = showMessageTime * 1000;
+    }
+  }
+
+  private setRadioVoiceEffect() {
+    if (radioVoiceEffect) {
+      if (radioVoiceEffect === "on") {
+        this.radioVoiceEffect = true;
+      }
+      if (radioVoiceEffect === "off") {
+        this.radioVoiceEffect = false;
+      }
+    }
+  }
+
+  private setRadioVoiceEffectDistortionValue() {
+    if (
+      radioVoiceEffectDistortionValue &&
+      !isNaN(radioVoiceEffectDistortionValue)
+    ) {
+      this.radioVoiceEffectDistortionValue = radioVoiceEffectDistortionValue;
+    }
+  }
+
+  private setIncomingRadioSound() {
+    if (openingRadioSound) {
+      if (openingRadioSound === "on") {
+        this.openingRadioSound = "on";
+      }
+      if (openingRadioSound === "off") {
+        this.openingRadioSound = "off";
+      }
+    }
+  }
+
+  private setTeam() {
+    if (teams) {
+      this.teams = teams;
+    }
+  }
+
+  private setDriverName() {
+    if (driverName) {
+      this.driverName = driverName;
+    }
+  }
+
+  private setOpeningRadioVolume() {
+    if (openingRadioVolume && !isNaN(openingRadioVolume)) {
+      this.openingRadioVolume = openingRadioVolume / 100;
+    }
+  }
+
+  private setDonationFromVolume() {
+    if (donationFromVolume && !isNaN(donationFromVolume)) {
+      this.donationFromVolume = donationFromVolume / 100;
+    }
+  }
+
+  private setDonationMessageVolume() {
+    if (donationMessageVolume && !isNaN(donationMessageVolume)) {
+      this.donationMessageVolume = donationMessageVolume / 100;
+    }
   }
 }

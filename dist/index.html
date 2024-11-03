@@ -100,61 +100,63 @@
         </div>
       </div>
       <div class="flex flex-col gap-2">
-        <div class="flex flex-col gap-1 bg-gray-100 p-2 border rounded">
-          <label for="openingRadioSoundOption">Opening Radio Sound </label>
-          <div class="flex items-center gap-2">
-            <input
-              type="radio"
-              name="openingRadioSound"
-              id="openingRadioSoundInputOn"
-              class="border border-black rounded px-5 py-3"
-              value="on"
-              required
-              checked
-            />
-            <label for="openingRadioSoundInputOn">On</label>
-            <span
-              id="openingRadioSoundExample"
-              class="cursor-pointer underline text-blue-500 hover:text-blue-600"
-              >Play Sound</span
-            >
+        <div class="flex gap-2 flex-col lg:flex-row">
+          <div class="flex flex-col gap-1 bg-gray-100 p-2 border rounded w-full">
+            <label for="openingRadioSoundOption">Opening Radio Sound </label>
+            <div class="flex items-center gap-2">
+              <input
+                type="radio"
+                name="openingRadioSound"
+                id="openingRadioSoundInputOn"
+                class="border border-black rounded px-5 py-3"
+                value="on"
+                required
+                checked
+              />
+              <label for="openingRadioSoundInputOn">On</label>
+              <span
+                id="openingRadioSoundExample"
+                class="cursor-pointer underline text-blue-500 hover:text-blue-600"
+                >Play Sound</span
+              >
+            </div>
+            <div class="flex items-center gap-2">
+              <input
+                type="radio"
+                name="openingRadioSound"
+                id="openingRadioSoundInputOff"
+                class="border border-black rounded px-5 py-3"
+                value="off"
+                required
+              />
+              <label for="openingRadioSoundInputOff">Off</label>
+            </div>
           </div>
-          <div class="flex items-center gap-2">
-            <input
-              type="radio"
-              name="openingRadioSound"
-              id="openingRadioSoundInputOff"
-              class="border border-black rounded px-5 py-3"
-              value="off"
-              required
-            />
-            <label for="openingRadioSoundInputOff">Off</label>
-          </div>
-        </div>
-        <div class="flex flex-col gap-1 bg-gray-100 p-2 border rounded">
-          <label for="radioEffect">Radio Voice Effect</label>
-          <div class="flex items-center gap-2">
-            <input
-              type="radio"
-              name="radioVoiceEffect"
-              id="radioEffectOn"
-              class="border border-black rounded px-5 py-3"
-              value="on"
-              required
-              checked
-            />
-            <label for="radioEffectOn">On</label>
-          </div>
-          <div class="flex items-center gap-2">
-            <input
-              type="radio"
-              name="radioVoiceEffect"
-              id="radioEffectOff"
-              class="border border-black rounded px-5 py-3"
-              value="off"
-              required
-            />
-            <label for="radioEffectOff">Off</label>
+          <div class="flex flex-col gap-1 bg-gray-100 p-2 border rounded w-full">
+            <label for="radioEffect">Radio Voice Effect</label>
+            <div class="flex items-center gap-2">
+              <input
+                type="radio"
+                name="radioVoiceEffect"
+                id="radioEffectOn"
+                class="border border-black rounded px-5 py-3"
+                value="on"
+                required
+                checked
+              />
+              <label for="radioEffectOn">On</label>
+            </div>
+            <div class="flex items-center gap-2">
+              <input
+                type="radio"
+                name="radioVoiceEffect"
+                id="radioEffectOff"
+                class="border border-black rounded px-5 py-3"
+                value="off"
+                required
+              />
+              <label for="radioEffectOff">Off</label>
+            </div>
           </div>
         </div>
         <div class="flex flex-col gap-1 bg-gray-100 p-2 rounded border">
