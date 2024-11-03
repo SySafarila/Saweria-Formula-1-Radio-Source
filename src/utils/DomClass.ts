@@ -11,6 +11,12 @@ const {
   teams,
   donationFontSizeInput,
   driverRadioFontSizeInput,
+  openingRadioVolume,
+  donationFromVolume,
+  donationMessageVolume,
+  showMessageTime,
+  openingRadioSound,
+  radioVoiceEffect,
 } = parsed;
 
 const sound = new Sound();
@@ -30,6 +36,87 @@ export default class Dom {
     this.openingRadioVolumeListener();
     this.donationFromVolumeListener();
     this.donationMessageVolumeListener();
+    this.setMessageShowTime();
+    this.setDonationFontSize();
+    this.setDriverRadioFontSize();
+    this.setTeam();
+    this.setOpeningRadioSound();
+    this.setRadioVoiceEffect();
+    this.themeSelector();
+  }
+
+  private setMessageShowTime() {
+    const input = document.getElementById(
+      "showMessageTime"
+    ) as HTMLInputElement;
+
+    if (input && status && status === "ready" && showMessageTime) {
+      input.value = showMessageTime.toString();
+    }
+  }
+
+  private setDonationFontSize() {
+    const input = document.getElementById(
+      "donationFontSizeInput"
+    ) as HTMLInputElement;
+
+    if (input && status && status === "ready" && donationFontSizeInput) {
+      input.value = donationFontSizeInput.toString();
+    }
+  }
+
+  private setDriverRadioFontSize() {
+    const input = document.getElementById(
+      "driverRadioFontSizeInput"
+    ) as HTMLInputElement;
+
+    if (input && status && status === "ready" && driverRadioFontSizeInput) {
+      input.value = driverRadioFontSizeInput.toString();
+    }
+  }
+
+  private setTeam() {
+    const input = document.getElementById("teams") as HTMLInputElement;
+
+    if (input && status && status === "ready" && teams) {
+      input.value = teams;
+    }
+  }
+
+  private setOpeningRadioSound() {
+    const inputOn = document.getElementById(
+      "openingRadioSoundInputOn"
+    ) as HTMLInputElement;
+    const inputOff = document.getElementById(
+      "openingRadioSoundInputOff"
+    ) as HTMLInputElement;
+
+    if (status && status === "ready") {
+      if (openingRadioSound === "on" && inputOn) {
+        inputOn.checked = true;
+      }
+      if (openingRadioSound === "off" && inputOff) {
+        inputOff.checked = true;
+      }
+    }
+  }
+
+  private setRadioVoiceEffect() {
+    const inputOn = document.getElementById(
+      "radioEffectOn"
+    ) as HTMLInputElement;
+    const inputOff = document.getElementById(
+      "radioEffectOff"
+    ) as HTMLInputElement;
+
+    if (status && status === "ready") {
+      if (radioVoiceEffect === "on" && inputOn) {
+        inputOn.checked = true;
+      }
+      if (radioVoiceEffect === "off" && inputOff) {
+        inputOff.checked = true;
+      }
+    }
   }
 
   obsDetector(): boolean {
@@ -88,7 +175,7 @@ export default class Dom {
     }
   }
 
-  themeSelector() {
+  private themeSelector() {
     const radioEl = document.getElementById("radio");
 
     if (radioEl) {
@@ -107,7 +194,7 @@ export default class Dom {
     const driverNameEl: HTMLElement = document.getElementById("driver-name");
 
     if (driverNameInput) {
-      driverNameInput.addEventListener("keyup", (e) => {
+      driverNameInput.addEventListener("input", (e) => {
         e.preventDefault();
 
         if (driverNameEl) {
@@ -131,7 +218,7 @@ export default class Dom {
     ) as HTMLInputElement;
 
     if (streamKeyInput && streamKey) {
-      streamKeyInput.value = setting.streamKey;
+      streamKeyInput.value = streamKey;
     }
   }
 
@@ -166,7 +253,7 @@ export default class Dom {
     const donationMessage = document.querySelector("#radio #message");
 
     if (input) {
-      input.addEventListener("keyup", (e) => {
+      input.addEventListener("input", (e) => {
         e.preventDefault();
 
         if (donationFrom) {
@@ -203,7 +290,7 @@ export default class Dom {
     const teamConstructors = document.querySelectorAll("#radio #constructor");
 
     if (input) {
-      input.addEventListener("keyup", (e) => {
+      input.addEventListener("input", (e) => {
         e.preventDefault();
 
         if (driver) {
@@ -258,6 +345,11 @@ export default class Dom {
         volumeSelected.innerText = input.value;
       });
     }
+
+    if (status && status === "ready") {
+      input.value = openingRadioVolume.toString();
+      volumeSelected.innerText = openingRadioVolume.toString();
+    }
   }
 
   private donationFromVolumeListener() {
@@ -273,6 +365,11 @@ export default class Dom {
         e.preventDefault();
         volumeSelected.innerText = input.value;
       });
+    }
+
+    if (status && status === "ready") {
+      input.value = donationFromVolume.toString();
+      volumeSelected.innerText = donationFromVolume.toString();
     }
   }
 
@@ -290,6 +387,11 @@ export default class Dom {
         volumeSelected.innerText = input.value;
       });
     }
+
+    if (status && status === "ready") {
+      input.value = donationMessageVolume.toString();
+      volumeSelected.innerText = donationMessageVolume.toString();
+    }
   }
 
   startAudioVisual() {
@@ -304,7 +406,7 @@ export default class Dom {
     });
   }
 
-  stopAudioVisual = () => {
+  stopAudioVisual() {
     const audioVisuals: NodeListOf<Element> =
       document.querySelectorAll("#audio-visual div");
 
@@ -316,5 +418,5 @@ export default class Dom {
       clearInterval(interval);
     });
     this.intervals = [];
-  };
+  }
 }

@@ -30,8 +30,6 @@ export const startF1Notif = () => {
 // DOM
 
 if (status && status == "ready") {
-  dom.themeSelector();
-
   // OBS Detector
   const isOBS: boolean = dom.obsDetector();
   if (isOBS) {
