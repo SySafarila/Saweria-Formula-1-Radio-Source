@@ -45,7 +45,12 @@ export default class SettingClass {
 
   private setStreamKey() {
     if (streamKey) {
-      this.streamKey = streamKeyParser(streamKey);
+      try {
+        this.streamKey = streamKeyParser(streamKey);
+      } catch (error: any) {
+        window.alert(error.message);
+        window.location.href = window.location.pathname;
+      }
     }
   }
 

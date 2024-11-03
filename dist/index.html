@@ -179,16 +179,14 @@
             class="border border-black rounded"
             min="0"
             max="100"
-            value="100"
+            value="70"
             step="1"
             required
           />
           <span>Volume <span id="donationFromVolumeSelected">100</span>%</span>
         </div>
       </div>
-      <div
-        class="flex flex-col gap-1 bg-gray-100 p-2 rounded border col-span-2 md:col-span-1"
-      >
+      <div class="flex flex-col gap-1 bg-gray-100 p-2 rounded border">
         <label for="donationMessageVolumeInput">Donation Message Volume</label>
         <div class="flex flex-col">
           <input
@@ -198,7 +196,7 @@
             class="border border-black rounded"
             min="0"
             max="100"
-            value="100"
+            value="80"
             step="1"
             required
           />
@@ -207,7 +205,28 @@
           >
         </div>
       </div>
-      <div class="grid grid-cols-1 gap-2 col-span-2 md:col-span-1">
+      <div class="flex flex-col gap-1 bg-gray-100 p-2 rounded border">
+        <label for="radioVoiceEffectDistortionValue">Radio Distortion Value</label>
+        <div class="flex flex-col">
+          <input
+            type="range"
+            name="radioVoiceEffectDistortionValue"
+            id="radioVoiceEffectDistortionValue"
+            class="border border-black rounded"
+            min="0"
+            max="100"
+            value="25"
+            step="1"
+            required
+          />
+          <span>
+            <span id="radioVoiceEffectDistortionValueSelected">100</span>%</span
+          >
+        </div>
+      </div>
+      <div
+        class="grid grid-cols-1 gap-2 col-span-2 md:col-span-1 md:col-start-2"
+      >
         <button
           type="button"
           class="px-5 py-3 bg-green-500 text-white rounded hover:bg-green-600"

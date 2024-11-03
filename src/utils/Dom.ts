@@ -17,6 +17,7 @@ const {
   showMessageTime,
   openingRadioSound,
   radioVoiceEffect,
+  radioVoiceEffectDistortionValue,
 } = parsed;
 
 export default class Dom {
@@ -44,6 +45,7 @@ export default class Dom {
     this.setRadioVoiceEffect();
     this.themeSelector();
     this.playSampleDonation();
+    this.distortionInputListener();
   }
 
   private playSampleDonation() {
@@ -354,7 +356,10 @@ export default class Dom {
       input.addEventListener("input", (e) => {
         e.preventDefault();
         volumeSelected.innerText = input.value;
+        this.setting.openingRadioVolume = parseInt(input.value) / 100;
       });
+      volumeSelected.innerText = input.value;
+      this.setting.openingRadioVolume = parseInt(input.value) / 100;
     }
 
     if (status && status === "ready") {
@@ -375,7 +380,10 @@ export default class Dom {
       input.addEventListener("input", (e) => {
         e.preventDefault();
         volumeSelected.innerText = input.value;
+        this.setting.donationFromVolume = parseInt(input.value) / 100;
       });
+      volumeSelected.innerText = input.value;
+      this.setting.donationFromVolume = parseInt(input.value) / 100;
     }
 
     if (status && status === "ready") {
@@ -398,11 +406,37 @@ export default class Dom {
         volumeSelected.innerText = input.value;
         this.setting.donationMessageVolume = parseInt(input.value) / 100;
       });
+      volumeSelected.innerText = input.value;
+      this.setting.donationMessageVolume = parseInt(input.value) / 100;
     }
 
     if (status && status === "ready") {
       input.value = donationMessageVolume.toString();
       volumeSelected.innerText = donationMessageVolume.toString();
+    }
+  }
+
+  private distortionInputListener() {
+    const input = document.getElementById(
+      "radioVoiceEffectDistortionValue"
+    ) as HTMLInputElement;
+    const distortionSelected = document.getElementById(
+      "radioVoiceEffectDistortionValueSelected"
+    );
+
+    if (input && distortionSelected) {
+      input.addEventListener("input", (e) => {
+        e.preventDefault();
+        distortionSelected.innerText = input.value;
+        this.setting.radioVoiceEffectDistortionValue = parseInt(input.value);
+      });
+      distortionSelected.innerText = input.value;
+      this.setting.radioVoiceEffectDistortionValue = parseInt(input.value);
+    }
+
+    if (status && status === "ready") {
+      input.value = radioVoiceEffectDistortionValue.toString();
+      distortionSelected.innerText = radioVoiceEffectDistortionValue.toString();
     }
   }
 

@@ -4,12 +4,16 @@ const streamKeyParser = (streamKey: string) => {
   try {
     const url = new URL(streamKey);
     const parsed = queryString.parse(url.search) as {
-      streamKey: string;
+      streamKey?: string;
     };
 
+    if (!parsed.streamKey) {
+      throw new Error("Stream Key not provided!");
+    }
+
     return parsed.streamKey;
-  } catch (error) {
-    throw new Error("Invalid URL");
+  } catch (error: any) {
+    throw new Error(error.message ?? "Invalid URL");
   }
 };
 
