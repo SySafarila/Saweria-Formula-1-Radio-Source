@@ -3,12 +3,14 @@ import { Queries } from "./types";
 import Dom from "./utils/DomClass";
 import SaweriaQueue from "./utils/Queue";
 import SettingClass from "./utils/SettingClass";
+import Sound from "./utils/Sound";
 
 const parsed = queryString.parse(location.search) as Queries;
 const { status } = parsed;
-export const setting = new SettingClass();
-export const queue = new SaweriaQueue();
-export const dom = new Dom();
+const setting = new SettingClass();
+export const sound = new Sound(setting);
+export const queue = new SaweriaQueue(setting);
+export const dom = new Dom(setting);
 export let socket: WebSocket;
 
 export const startF1Notif = () => {

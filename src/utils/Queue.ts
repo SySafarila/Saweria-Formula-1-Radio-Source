@@ -1,16 +1,16 @@
-import { dom, setting, socket, startF1Notif } from "..";
+import { dom, socket, sound, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
 import startDelay from "./delay";
-import Sound from "./Sound";
-
-const sound = new Sound();
+import SettingClass from "./SettingClass";
 
 export default class SaweriaQueue {
+  private setting: SettingClass;
   private isPlaying: boolean = false;
   private queue: SaweriaDonation[] = [];
   private customSaweriaNotifUrl: string | undefined = undefined;
 
-  constructor() {
+  constructor(setting: SettingClass) {
+    this.setting = setting;
     console.log("Saweria Queue Init");
   }
 
@@ -111,7 +111,7 @@ export default class SaweriaQueue {
   }
 
   private async playOpeningRadio() {
-    if (setting.openingRadioSound == "on") {
+    if (this.setting.openingRadioSound == "on") {
       await sound.playOpeningRadio();
     }
   }
@@ -120,12 +120,16 @@ export default class SaweriaQueue {
     const { tts } = this.getDonation();
 
     await this.playNotif();
-    await sound.playTtsFrom(`data:audio/wav;base64,${tts[0]}`);
+    if (tts[0]) {
+      await sound.playTtsFrom(`data:audio/wav;base64,${tts[0]}`);
+    }
     dom.startAudioVisual();
     await this.playOpeningRadio();
-    await sound.playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
+    if (tts[1]) {
+      await sound.playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
+    }
     dom.stopAudioVisual();
-    await startDelay(setting.showMessageTime);
+    await startDelay(this.setting.showMessageTime);
     this.hideRadio();
     await startDelay(1000); // delay 1 detik
   }
@@ -134,7 +138,7 @@ export default class SaweriaQueue {
     await this.playNotif();
     dom.startAudioVisual();
     await this.playOpeningRadio();
-    await startDelay(setting.showMessageTime);
+    await startDelay(this.setting.showMessageTime);
     dom.stopAudioVisual();
     await startDelay(1000); // delay 1 detik
     this.hideRadio();

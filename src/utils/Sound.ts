@@ -1,10 +1,12 @@
-import { queue, setting } from "..";
+import { queue } from "..";
 import { cashRegisterSound, incomingRadioSound } from "./base64Audios";
 import { exampleDonation } from "./exampleDonation";
+import SettingClass from "./SettingClass";
 
 export default class Sound {
-  constructor() {
-    //
+  private setting: SettingClass;
+  constructor(setting: SettingClass) {
+    this.setting = setting;
   }
 
   private makeDistortionCurve(amount: number) {
@@ -22,7 +24,7 @@ export default class Sound {
   private makeRadioEffect(audio: HTMLAudioElement): AudioContext {
     const lowpassValue = 3000;
     const highpassValue = 500;
-    const distortionValue = setting.radioVoiceEffectDistortionValue ?? 200;
+    const distortionValue = this.setting.radioVoiceEffectDistortionValue ?? 200;
 
     const audioContext = new window.AudioContext();
     const source = audioContext.createMediaElementSource(audio);
@@ -51,7 +53,7 @@ export default class Sound {
     return new Promise((resolve, reject) => {
       try {
         const sound = new Audio(base64);
-        sound.volume = setting.donationFromVolume;
+        sound.volume = this.setting.donationFromVolume;
         sound.play();
         sound.addEventListener("pause", () => {
           resolve("Success!");
@@ -66,11 +68,11 @@ export default class Sound {
     return new Promise((resolve, reject) => {
       try {
         const sound = new Audio(base64);
-        if (setting.radioVoiceEffect == true) {
+        if (this.setting.radioVoiceEffect == true) {
           const radioEffect = this.makeRadioEffect(sound);
           radioEffect.resume();
         }
-        sound.volume = setting.donationMessageVolume;
+        sound.volume = this.setting.donationMessageVolume;
         sound.play();
         sound.addEventListener("pause", () => {
           resolve("Success!");
@@ -85,7 +87,7 @@ export default class Sound {
     return new Promise((resolve, reject) => {
       try {
         const sound = new Audio(`data:audio/wav;base64,${incomingRadioSound}`);
-        sound.volume = setting.openingRadioVolume;
+        sound.volume = this.setting.openingRadioVolume;
         sound.play();
         sound.addEventListener("pause", () => {
           resolve("Success!");
@@ -100,7 +102,7 @@ export default class Sound {
     return new Promise((resolve, reject) => {
       try {
         const sound = new Audio(`data:audio/wav;base64,${cashRegisterSound}`);
-        sound.volume = setting.openingRadioVolume;
+        sound.volume = this.setting.openingRadioVolume;
         sound.play();
         sound.addEventListener("pause", () => {
           resolve("Success!");
@@ -115,7 +117,7 @@ export default class Sound {
     return new Promise((resolve, reject) => {
       try {
         const sound = new Audio(url);
-        sound.volume = setting.openingRadioVolume;
+        sound.volume = this.setting.openingRadioVolume;
         sound.play();
         sound.addEventListener("pause", () => {
           resolve("Success!");

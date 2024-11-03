@@ -1,7 +1,7 @@
 import queryString from "query-string";
-import { setting, startF1Notif } from "..";
+import { sound, startF1Notif } from "..";
 import { Queries } from "../types";
-import Sound from "./Sound";
+import SettingClass from "./SettingClass";
 
 const parsed = queryString.parse(location.search) as Queries;
 const {
@@ -19,12 +19,12 @@ const {
   radioVoiceEffect,
 } = parsed;
 
-const sound = new Sound();
-
 export default class Dom {
   private intervals: NodeJS.Timeout[] = [];
+  private setting: SettingClass;
 
-  constructor() {
+  constructor(setting: SettingClass) {
+    this.setting = setting;
     this.driverNameInputListener();
     this.streamKeyInputListener();
     this.hideForm();
@@ -215,11 +215,11 @@ export default class Dom {
     }
 
     if (driverNameEl) {
-      driverNameEl.innerText = setting.driverName ?? "Denaldi";
+      driverNameEl.innerText = this.setting.driverName ?? "Denaldi";
     }
 
     if (driverName && driverNameInput) {
-      driverNameInput.value = setting.driverName ?? "Denaldi";
+      driverNameInput.value = this.setting.driverName ?? "Denaldi";
     }
   }
 
@@ -396,7 +396,7 @@ export default class Dom {
       input.addEventListener("input", (e) => {
         e.preventDefault();
         volumeSelected.innerText = input.value;
-        setting.donationMessageVolume = parseInt(input.value) / 100;
+        this.setting.donationMessageVolume = parseInt(input.value) / 100;
       });
     }
 
