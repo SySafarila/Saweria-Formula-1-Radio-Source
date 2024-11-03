@@ -1,5 +1,6 @@
-import { setting } from "..";
+import { queue, setting } from "..";
 import { cashRegisterSound, incomingRadioSound } from "./base64Audios";
+import { exampleDonation } from "./exampleDonation";
 
 export default class Sound {
   constructor() {
@@ -123,5 +124,9 @@ export default class Sound {
         reject("Failed!");
       }
     });
+  }
+
+  playExampleDonation() {
+    queue.addQueue(exampleDonation);
   }
 }

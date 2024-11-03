@@ -43,6 +43,17 @@ export default class Dom {
     this.setOpeningRadioSound();
     this.setRadioVoiceEffect();
     this.themeSelector();
+    this.playSampleDonation();
+  }
+
+  private playSampleDonation() {
+    const button = document.getElementById("playsampleDonation");
+    if (button) {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        sound.playExampleDonation();
+      });
+    }
   }
 
   private setMessageShowTime() {
@@ -183,7 +194,7 @@ export default class Dom {
         radioEl.classList.remove(className);
       });
 
-      radioEl.classList.add(teams);
+      radioEl.classList.add(teams ?? "ferrari");
     }
   }
 
@@ -385,6 +396,7 @@ export default class Dom {
       input.addEventListener("input", (e) => {
         e.preventDefault();
         volumeSelected.innerText = input.value;
+        setting.donationMessageVolume = parseInt(input.value) / 100;
       });
     }
 

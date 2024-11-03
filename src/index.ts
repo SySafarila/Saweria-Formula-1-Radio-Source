@@ -7,7 +7,7 @@ import SettingClass from "./utils/SettingClass";
 const parsed = queryString.parse(location.search) as Queries;
 const { status } = parsed;
 export const setting = new SettingClass();
-const queue = new SaweriaQueue();
+export const queue = new SaweriaQueue();
 export const dom = new Dom();
 export let socket: WebSocket;
 

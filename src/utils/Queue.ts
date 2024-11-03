@@ -37,7 +37,7 @@ export default class SaweriaQueue {
     return this.queue[0];
   }
 
-  private addQueue(donation: SaweriaDonation): void {
+  addQueue(donation: SaweriaDonation): void {
     this.queue.push(donation);
     if (this.isPlaying === false) {
       this.startQueue();
