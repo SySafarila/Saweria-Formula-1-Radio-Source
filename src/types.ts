@@ -41,51 +41,46 @@ export type SaweriaMessage = {
   data: SaweriaDonation[];
 };
 
+type Team =
+  | "ferrari"
+  | "mercedes"
+  | "redbull"
+  | "mclaren"
+  | "aston-martin"
+  | "haas"
+  | "rb"
+  | "williams"
+  | "alpine"
+  | "sauber";
+
 export type Settings = {
-  openingRadioSound: "on" | "off";
-  radioVoiceEffect: boolean;
-  radioVoiceEffectDistortionValue: number;
-  showMessageTime: number;
   streamKey: string;
-  driverName?: string;
-  teams?:
-    | "ferrari"
-    | "mercedes"
-    | "redbull"
-    | "mclaren"
-    | "aston-martin"
-    | "haas"
-    | "rb"
-    | "williams"
-    | "alpine"
-    | "sauber";
-  openingRadioVolume: number;
-  donationFromVolume: number;
-  donationMessageVolume: number;
+  donateDuration: number;
+  radioVoiceEffectDistortionValue: number;
+  radioVoiceEffect: boolean;
+  incomingRadio: boolean;
+  driverName: string;
+  status: "ready";
+  team: Team;
+  donateFontSize: number;
+  radioFontSize: number;
+  incomingRadioVolume: number;
+  donateFromVolume: number;
+  donateMessageVolume: number;
 };
 
 export type Queries = {
   streamKey?: string;
-  showMessageTime?: number;
+  donateDuration?: number;
   radioVoiceEffectDistortionValue?: number;
-  radioVoiceEffect?: "on" | "off";
-  openingRadioSound?: "on" | "off";
+  radioVoiceEffect?: boolean;
+  incomingRadio?: boolean;
   driverName?: string;
   status?: "ready";
-  teams?:
-    | "ferrari"
-    | "mercedes"
-    | "redbull"
-    | "mclaren"
-    | "aston-martin"
-    | "haas"
-    | "rb"
-    | "williams"
-    | "alpine"
-    | "sauber";
-  donationFontSizeInput?: number;
-  driverRadioFontSizeInput?: number;
-  openingRadioVolume?: number;
-  donationFromVolume?: number;
-  donationMessageVolume?: number;
+  team?: Team;
+  donateFontSize?: number;
+  radioFontSize?: number;
+  incomingRadioVolume?: number;
+  donateFromVolume?: number;
+  donateMessageVolume?: number;
 };
