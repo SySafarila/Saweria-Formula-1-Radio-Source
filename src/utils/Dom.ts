@@ -3,6 +3,8 @@ import { sound, startF1Notif } from "..";
 import { Queries } from "../types";
 import SettingClass from "./Setting";
 
+const query = queryString.parse(location.search) as Queries;
+
 export default class Dom {
   private intervals: NodeJS.Timeout[] = [];
   private setting: SettingClass;
@@ -36,6 +38,50 @@ export default class Dom {
     this.donationFontSetter();
     this.driverRadioFontSizeSetter();
     this.distortionInputListener();
+    this.radioVoiceEffectListener();
+    this.incomingRadioListener();
+  }
+
+  private radioVoiceEffectListener() {
+    const inputOn = document.getElementById(
+      "radioEffectOn"
+    ) as HTMLInputElement;
+    const inputOff = document.getElementById(
+      "radioEffectOff"
+    ) as HTMLInputElement;
+
+    if (inputOn) {
+      inputOn.addEventListener("input", (e) => {
+        this.setting.radioVoiceEffect = true;
+      });
+    }
+
+    if (inputOff) {
+      inputOff.addEventListener("input", (e) => {
+        this.setting.radioVoiceEffect = false;
+      });
+    }
+  }
+
+  private incomingRadioListener() {
+    const inputOn = document.getElementById(
+      "openingRadioSoundInputOn"
+    ) as HTMLInputElement;
+    const inputOff = document.getElementById(
+      "openingRadioSoundInputOff"
+    ) as HTMLInputElement;
+
+    if (inputOn) {
+      inputOn.addEventListener("input", (e) => {
+        this.setting.incomingRadio = true;
+      });
+    }
+
+    if (inputOff) {
+      inputOff.addEventListener("input", (e) => {
+        this.setting.incomingRadio = false;
+      });
+    }
   }
 
   private playSampleDonation() {
@@ -58,7 +104,8 @@ export default class Dom {
       this.setting.status === "ready" &&
       this.setting.donateDuration
     ) {
-      input.value = this.setting.donateDuration.toString();
+      // input.value = this.setting.donateDuration.toString();
+      input.value = (this.setting.donateDuration / 1000).toString();
     }
   }
 
@@ -249,7 +296,7 @@ export default class Dom {
       this.setting.streamKey &&
       this.setting.status === "ready"
     ) {
-      streamKeyInput.value = this.setting.streamKey;
+      streamKeyInput.value = query.streamKey;
     }
   }
 
@@ -387,8 +434,9 @@ export default class Dom {
         volumeSelected.innerText = input.value;
         this.setting.incomingRadioVolume = parseInt(input.value) / 100;
       });
-      volumeSelected.innerText = input.value;
-      this.setting.incomingRadioVolume = parseInt(input.value) / 100;
+      // volumeSelected.innerText = query.incomingRadioVolume;
+      // this.setting.incomingRadioVolume =
+      //   parseInt(query.incomingRadioVolume) / 100;
     }
 
     this.openingRadioVolumeSetter();
@@ -404,7 +452,13 @@ export default class Dom {
 
     if (this.setting.status === "ready" && input && volumeSelected) {
       input.value = this.setting.incomingRadioVolume.toString();
-      volumeSelected.innerText = this.setting.incomingRadioVolume.toString();
+      volumeSelected.innerText = (
+        this.setting.incomingRadioVolume * 100
+      ).toString();
+    } else if (this.setting.status !== "ready" && input && volumeSelected) {
+      // input.value = this.setting.incomingRadioVolume.toString();
+      volumeSelected.innerText = input.value.toString();
+      this.setting.incomingRadioVolume = parseInt(input.value) / 100;
     }
   }
 
@@ -422,8 +476,8 @@ export default class Dom {
         volumeSelected.innerText = input.value;
         this.setting.donateFromVolume = parseInt(input.value) / 100;
       });
-      volumeSelected.innerText = input.value;
-      this.setting.donateFromVolume = parseInt(input.value) / 100;
+      // volumeSelected.innerText = query.donateFromVolume;
+      // this.setting.donateFromVolume = parseInt(query.donateFromVolume) / 100;
     }
 
     this.donationFromVolumeSetter();
@@ -438,7 +492,12 @@ export default class Dom {
     );
     if (this.setting.status === "ready" && input && volumeSelected) {
       input.value = this.setting.donateFromVolume.toString();
-      volumeSelected.innerText = this.setting.donateFromVolume.toString();
+      volumeSelected.innerText = (
+        this.setting.donateFromVolume * 100
+      ).toString();
+    } else if (this.setting.status !== "ready" && input && volumeSelected) {
+      volumeSelected.innerText = input.value.toString();
+      this.setting.donateFromVolume = parseInt(input.value) / 100;
     }
   }
 
@@ -456,8 +515,9 @@ export default class Dom {
         volumeSelected.innerText = input.value;
         this.setting.donateMessageVolume = parseInt(input.value) / 100;
       });
-      volumeSelected.innerText = input.value;
-      this.setting.donateMessageVolume = parseInt(input.value) / 100;
+      // volumeSelected.innerText = query.donateMessageVolume;
+      // this.setting.donateMessageVolume =
+      //   parseInt(query.donateMessageVolume) / 100;
     }
 
     this.donationMessageVolumeSetter();
@@ -473,7 +533,12 @@ export default class Dom {
 
     if (this.setting.status === "ready" && input && volumeSelected) {
       input.value = this.setting.donateMessageVolume.toString();
-      volumeSelected.innerText = this.setting.donateMessageVolume.toString();
+      volumeSelected.innerText = (
+        this.setting.donateMessageVolume * 100
+      ).toString();
+    } else if (this.setting.status !== "ready" && input && volumeSelected) {
+      volumeSelected.innerText = input.value.toString();
+      this.setting.donateMessageVolume = parseInt(input.value) / 100;
     }
   }
 
@@ -491,8 +556,10 @@ export default class Dom {
         distortionSelected.innerText = input.value;
         this.setting.radioVoiceEffectDistortionValue = parseInt(input.value);
       });
-      distortionSelected.innerText = input.value;
-      this.setting.radioVoiceEffectDistortionValue = parseInt(input.value);
+      // distortionSelected.innerText = query.radioVoiceEffectDistortionValue;
+      // this.setting.radioVoiceEffectDistortionValue = parseInt(
+      //   query.radioVoiceEffectDistortionValue
+      // );
     }
 
     this.distortionInputSetter();
@@ -509,6 +576,9 @@ export default class Dom {
       input.value = this.setting.radioVoiceEffectDistortionValue.toString();
       distortionSelected.innerText =
         this.setting.radioVoiceEffectDistortionValue.toString();
+    } else if (this.setting.status !== "ready" && input && distortionSelected) {
+      distortionSelected.innerText = input.value.toString();
+      this.setting.radioVoiceEffectDistortionValue = parseInt(input.value);
     }
   }
 

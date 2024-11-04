@@ -41,7 +41,7 @@
         <label for="showMessageTime">Message Time (Second)</label>
         <input
           type="number"
-          name="showMessageTime"
+          name="donateDuration"
           id="showMessageTime"
           class="border border-black rounded px-5 py-3"
           placeholder="5"
@@ -54,7 +54,7 @@
         <label for="donationFontSizeInput">Donation Font Size (PX)</label>
         <input
           type="number"
-          name="donationFontSizeInput"
+          name="donateFontSize"
           id="donationFontSizeInput"
           class="border border-black rounded px-5 py-3"
           min="1"
@@ -68,7 +68,7 @@
         >
         <input
           type="number"
-          name="driverRadioFontSizeInput"
+          name="radioFontSize"
           id="driverRadioFontSizeInput"
           class="border border-black rounded px-5 py-3"
           min="1"
@@ -79,7 +79,7 @@
       <div class="flex flex-col gap-1">
         <label for="teams">Teams</label>
         <select
-          name="teams"
+          name="team"
           id="teams"
           class="border-black border rounded px-5 py-3"
         >
@@ -100,7 +100,7 @@
         <div class="flex items-center gap-2">
           <input
             type="radio"
-            name="openingRadioSound"
+            name="incomingRadio"
             id="openingRadioSoundInputOn"
             class="border border-black rounded px-5 py-3"
             value="on"
@@ -117,7 +117,7 @@
         <div class="flex items-center gap-2">
           <input
             type="radio"
-            name="openingRadioSound"
+            name="incomingRadio"
             id="openingRadioSoundInputOff"
             class="border border-black rounded px-5 py-3"
             value="off"
@@ -157,7 +157,7 @@
         <div class="flex flex-col">
           <input
             type="range"
-            name="openingRadioVolume"
+            name="incomingRadioVolume"
             id="openingRadioVolumeInput"
             class="border border-black rounded"
             min="0"
@@ -174,7 +174,7 @@
         <div class="flex flex-col">
           <input
             type="range"
-            name="donationFromVolume"
+            name="donateFromVolume"
             id="donationFromVolumeInput"
             class="border border-black rounded"
             min="0"
@@ -191,7 +191,7 @@
         <div class="flex flex-col">
           <input
             type="range"
-            name="donationMessageVolume"
+            name="donateMessageVolume"
             id="donationMessageVolumeInput"
             class="border border-black rounded"
             min="0"

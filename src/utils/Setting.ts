@@ -20,8 +20,7 @@ export default class SettingClass {
   radioFontSize: Settings["radioFontSize"] = 36;
 
   constructor() {
-    console.log(query);
-
+    console.log("query: ", query);
     this.setStreamKey();
     this.setShowMessageTime();
     this.setRadioVoiceEffect();
@@ -35,7 +34,7 @@ export default class SettingClass {
     this.setStatus();
     this.setDonateFontSize();
     this.setRadioFontSize();
-    console.log("Setting loaded: ", this);
+    console.log("Setting: ", this);
   }
 
   private setRadioFontSize() {
@@ -82,10 +81,11 @@ export default class SettingClass {
   private setRadioVoiceEffectDistortionValue() {
     if (
       query.radioVoiceEffectDistortionValue &&
-      !isNaN(query.radioVoiceEffectDistortionValue)
+      !isNaN(parseInt(query.radioVoiceEffectDistortionValue))
     ) {
-      this.radioVoiceEffectDistortionValue =
-        query.radioVoiceEffectDistortionValue;
+      this.radioVoiceEffectDistortionValue = parseInt(
+        query.radioVoiceEffectDistortionValue
+      );
     }
   }
 
@@ -108,20 +108,26 @@ export default class SettingClass {
   }
 
   private setIncomingRadioVolume() {
-    if (query.incomingRadioVolume && !isNaN(query.incomingRadioVolume)) {
-      this.incomingRadioVolume = query.incomingRadioVolume / 100;
+    if (
+      query.incomingRadioVolume &&
+      !isNaN(parseInt(query.incomingRadioVolume))
+    ) {
+      this.incomingRadioVolume = parseInt(query.incomingRadioVolume) / 100;
     }
   }
 
   private setDonateFromVolume() {
-    if (query.donateFromVolume && !isNaN(query.donateFromVolume)) {
-      this.donateFromVolume = query.donateFromVolume / 100;
+    if (query.donateFromVolume && !isNaN(parseInt(query.donateFromVolume))) {
+      this.donateFromVolume = parseInt(query.donateFromVolume) / 100;
     }
   }
 
   private setDonateMessageVolume() {
-    if (query.donateMessageVolume && !isNaN(query.donateMessageVolume)) {
-      this.donateMessageVolume = query.donateMessageVolume / 100;
+    if (
+      query.donateMessageVolume &&
+      !isNaN(parseInt(query.donateMessageVolume))
+    ) {
+      this.donateMessageVolume = parseInt(query.donateMessageVolume) / 100;
     }
   }
 }

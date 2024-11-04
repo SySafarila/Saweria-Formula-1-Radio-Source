@@ -72,7 +72,7 @@ export type Settings = {
 export type Queries = {
   streamKey?: string;
   donateDuration?: number;
-  radioVoiceEffectDistortionValue?: number;
+  radioVoiceEffectDistortionValue?: string;
   radioVoiceEffect?: "on" | "off";
   incomingRadio?: "on" | "off";
   driverName?: string;
@@ -80,7 +80,7 @@ export type Queries = {
   team?: Team;
   donateFontSize?: number;
   radioFontSize?: number;
-  incomingRadioVolume?: number;
-  donateFromVolume?: number;
-  donateMessageVolume?: number;
+  incomingRadioVolume?: string;
+  donateFromVolume?: string;
+  donateMessageVolume?: string;
 };
