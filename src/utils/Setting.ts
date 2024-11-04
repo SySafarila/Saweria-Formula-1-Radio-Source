@@ -16,8 +16,12 @@ export default class SettingClass {
   donateFromVolume: Settings["donateFromVolume"] = 1;
   donateMessageVolume: Settings["donateMessageVolume"] = 1;
   status: Settings["status"] = query.status;
+  donateFontSize: Settings["donateFontSize"] = 20;
+  radioFontSize: Settings["radioFontSize"] = 36;
 
   constructor() {
+    console.log(query);
+
     this.setStreamKey();
     this.setShowMessageTime();
     this.setRadioVoiceEffect();
@@ -29,8 +33,21 @@ export default class SettingClass {
     this.setDonateFromVolume();
     this.setDonateMessageVolume();
     this.setStatus();
-    console.log("Setting loaded:");
-    console.log(this);
+    this.setDonateFontSize();
+    this.setRadioFontSize();
+    console.log("Setting loaded: ", this);
+  }
+
+  private setRadioFontSize() {
+    if (query.radioFontSize && !isNaN(query.radioFontSize)) {
+      this.radioFontSize = query.radioFontSize;
+    }
+  }
+
+  private setDonateFontSize() {
+    if (query.donateFontSize && !isNaN(query.donateFontSize)) {
+      this.donateFontSize = query.donateFontSize;
+    }
   }
 
   private setStatus() {
@@ -58,7 +75,7 @@ export default class SettingClass {
 
   private setRadioVoiceEffect() {
     if (query.radioVoiceEffect) {
-      this.radioVoiceEffect = query.radioVoiceEffect;
+      this.radioVoiceEffect = query.radioVoiceEffect == "on" ? true : false;
     }
   }
 
@@ -74,7 +91,7 @@ export default class SettingClass {
 
   private setIncomingRadio() {
     if (query.incomingRadio) {
-      this.incomingRadio = query.incomingRadio;
+      this.incomingRadio = query.incomingRadio == "on" ? true : false;
     }
   }
 

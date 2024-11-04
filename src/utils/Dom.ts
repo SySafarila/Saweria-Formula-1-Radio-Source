@@ -3,48 +3,38 @@ import { sound, startF1Notif } from "..";
 import { Queries } from "../types";
 import SettingClass from "./Setting";
 
-const parsed = queryString.parse(location.search) as Queries;
-const {
-  streamKey,
-  driverName,
-  status,
-  teams,
-  donationFontSizeInput,
-  driverRadioFontSizeInput,
-  openingRadioVolume,
-  donationFromVolume,
-  donationMessageVolume,
-  showMessageTime,
-  openingRadioSound,
-  radioVoiceEffect,
-  radioVoiceEffectDistortionValue,
-} = parsed;
-
 export default class Dom {
   private intervals: NodeJS.Timeout[] = [];
   private setting: SettingClass;
 
   constructor(setting: SettingClass) {
     this.setting = setting;
-    this.driverNameInputListener();
-    this.streamKeyInputListener();
+    // this.driverNameInputListener();
+    this.streamKeySetter();
     this.hideForm();
     this.openingRadioSoundSampleListener();
     this.startButtonTrigger();
-    this.teamSelector();
+    this.teamSelectorListener();
     this.donationFontSizeInputListener();
     this.driverRadioFontSizeInputListener();
     this.openingRadioVolumeListener();
     this.donationFromVolumeListener();
     this.donationMessageVolumeListener();
-    this.setMessageShowTime();
-    this.setDonationFontSize();
-    this.setDriverRadioFontSize();
+    this.setDonateDuration();
+    this.setDonateFontSize();
+    // this.setDriverRadioFontSize();
     this.setTeam();
-    this.setOpeningRadioSound();
+    // this.setOpeningRadioSound();
     this.setRadioVoiceEffect();
-    this.themeSelector();
+    // this.teamSelectorListener();
     this.playSampleDonation();
+    this.setRadioFontSize();
+    this.setIncomingRadio();
+    this.teamSelectorSetter();
+    this.driverNameInputListener();
+    this.driverNameSetter();
+    this.donationFontSetter();
+    this.driverRadioFontSizeSetter();
     this.distortionInputListener();
   }
 
@@ -58,45 +48,57 @@ export default class Dom {
     }
   }
 
-  private setMessageShowTime() {
+  private setDonateDuration() {
     const input = document.getElementById(
       "showMessageTime"
     ) as HTMLInputElement;
 
-    if (input && status && status === "ready" && showMessageTime) {
-      input.value = showMessageTime.toString();
+    if (
+      input &&
+      this.setting.status === "ready" &&
+      this.setting.donateDuration
+    ) {
+      input.value = this.setting.donateDuration.toString();
     }
   }
 
-  private setDonationFontSize() {
+  private setDonateFontSize() {
     const input = document.getElementById(
       "donationFontSizeInput"
     ) as HTMLInputElement;
 
-    if (input && status && status === "ready" && donationFontSizeInput) {
-      input.value = donationFontSizeInput.toString();
+    if (
+      input &&
+      this.setting.status === "ready" &&
+      this.setting.donateFontSize
+    ) {
+      input.value = this.setting.donateFontSize.toString();
     }
   }
 
-  private setDriverRadioFontSize() {
+  private setRadioFontSize() {
     const input = document.getElementById(
       "driverRadioFontSizeInput"
     ) as HTMLInputElement;
 
-    if (input && status && status === "ready" && driverRadioFontSizeInput) {
-      input.value = driverRadioFontSizeInput.toString();
+    if (
+      input &&
+      this.setting.status === "ready" &&
+      this.setting.radioFontSize
+    ) {
+      input.value = this.setting.radioFontSize.toString();
     }
   }
 
   private setTeam() {
     const input = document.getElementById("teams") as HTMLInputElement;
 
-    if (input && status && status === "ready" && teams) {
-      input.value = teams;
+    if (input && this.setting.status === "ready" && this.setting.team) {
+      input.value = this.setting.team;
     }
   }
 
-  private setOpeningRadioSound() {
+  private setIncomingRadio() {
     const inputOn = document.getElementById(
       "openingRadioSoundInputOn"
     ) as HTMLInputElement;
@@ -104,11 +106,11 @@ export default class Dom {
       "openingRadioSoundInputOff"
     ) as HTMLInputElement;
 
-    if (status && status === "ready") {
-      if (openingRadioSound === "on" && inputOn) {
+    if (this.setting.status === "ready") {
+      if (this.setting.incomingRadio === true && inputOn) {
         inputOn.checked = true;
       }
-      if (openingRadioSound === "off" && inputOff) {
+      if (this.setting.incomingRadio === false && inputOff) {
         inputOff.checked = true;
       }
     }
@@ -122,11 +124,11 @@ export default class Dom {
       "radioEffectOff"
     ) as HTMLInputElement;
 
-    if (status && status === "ready") {
-      if (radioVoiceEffect === "on" && inputOn) {
+    if (this.setting.status === "ready") {
+      if (this.setting.radioVoiceEffect === true && inputOn) {
         inputOn.checked = true;
       }
-      if (radioVoiceEffect === "off" && inputOff) {
+      if (this.setting.radioVoiceEffect === false && inputOff) {
         inputOff.checked = true;
       }
     }
@@ -149,7 +151,7 @@ export default class Dom {
 
   private startButtonTrigger() {
     const startButton: HTMLElement = document.getElementById("startButton");
-    if (!status) {
+    if (!this.setting.status) {
       this.hideStartButton();
     }
 
@@ -170,13 +172,13 @@ export default class Dom {
     }
   }
 
-  private teamSelector() {
+  private teamSelectorListener() {
     const teamSelectorEl = document.getElementById("teams") as HTMLInputElement;
+    const radioEl = document.getElementById("radio");
 
     if (teamSelectorEl) {
       teamSelectorEl.addEventListener("change", (e) => {
         e.preventDefault();
-        const radioEl = document.getElementById("radio");
         if (radioEl) {
           radioEl.classList.forEach((className) => {
             radioEl.classList.remove(className);
@@ -188,15 +190,15 @@ export default class Dom {
     }
   }
 
-  private themeSelector() {
+  private teamSelectorSetter() {
     const radioEl = document.getElementById("radio");
 
-    if (radioEl) {
+    if (radioEl && this.setting.status === "ready") {
       radioEl.classList.forEach((className) => {
         radioEl.classList.remove(className);
       });
 
-      radioEl.classList.add(teams ?? "ferrari");
+      radioEl.classList.add(this.setting.team ?? "ferrari");
     }
   }
 
@@ -216,22 +218,38 @@ export default class Dom {
       });
     }
 
-    if (driverNameEl) {
-      driverNameEl.innerText = this.setting.driverName ?? "Denaldi";
-    }
+    // if (driverNameEl) {
+    //   driverNameEl.innerText = this.setting.driverName ?? "Denaldi";
+    // }
 
-    if (driverName && driverNameInput) {
-      driverNameInput.value = this.setting.driverName ?? "Denaldi";
+    // if (driverName && driverNameInput) {
+    //   driverNameInput.value = this.setting.driverName ?? "Denaldi";
+    // }
+  }
+
+  private driverNameSetter() {
+    const driverNameInput = document.getElementById(
+      "driverNameInput"
+    ) as HTMLInputElement;
+    const driverNameEl: HTMLElement = document.getElementById("driver-name");
+
+    if (this.setting.driverName) {
+      driverNameInput.value = this.setting.driverName;
+      driverNameEl.innerText = this.setting.driverName;
     }
   }
 
-  private streamKeyInputListener() {
+  private streamKeySetter() {
     const streamKeyInput = document.getElementById(
       "streamKeyInput"
     ) as HTMLInputElement;
 
-    if (streamKeyInput && streamKey) {
-      streamKeyInput.value = streamKey;
+    if (
+      streamKeyInput &&
+      this.setting.streamKey &&
+      this.setting.status === "ready"
+    ) {
+      streamKeyInput.value = this.setting.streamKey;
     }
   }
 
@@ -239,7 +257,7 @@ export default class Dom {
     const formSetting = document.getElementById("formSetting");
     if (
       formSetting &&
-      status == "ready" &&
+      this.setting.status == "ready" &&
       formSetting.classList.contains("hidden") == false
     ) {
       formSetting.classList.add("hidden");
@@ -253,7 +271,7 @@ export default class Dom {
     if (openingRadioSoundExample) {
       openingRadioSoundExample.addEventListener("click", (e) => {
         e.preventDefault();
-        sound.playOpeningRadio();
+        sound.playIncomingRadio();
       });
     }
   }
@@ -277,18 +295,25 @@ export default class Dom {
         }
       });
     }
+  }
 
-    if (donationFontSizeInput) {
+  private donationFontSetter() {
+    const donationFrom: HTMLElement =
+      document.querySelector("#radio #donation");
+    const donationMessage: HTMLElement =
+      document.querySelector("#radio #message");
+
+    if (this.setting.donateFontSize) {
       if (donationFrom) {
         donationFrom.setAttribute(
           "style",
-          `font-size: ${donationFontSizeInput}px;`
+          `font-size: ${this.setting.donateFontSize}px`
         );
       }
       if (donationMessage) {
         donationMessage.setAttribute(
           "style",
-          `font-size: ${donationFontSizeInput}px;`
+          `font-size: ${this.setting.donateFontSize}px`
         );
       }
     }
@@ -319,28 +344,32 @@ export default class Dom {
         }
       });
     }
+  }
 
-    if (input) {
-      if (driver) {
-        driver.setAttribute(
+  private driverRadioFontSizeSetter() {
+    const driver = document.querySelector("#radio #driver-name");
+    const driverRadio = document.querySelector("#radio #driver-radio");
+    const teamConstructors = document.querySelectorAll("#radio #constructor");
+
+    if (driver) {
+      driver.setAttribute(
+        "style",
+        `font-size: ${this.setting.radioFontSize}px;`
+      );
+    }
+    if (driverRadio) {
+      driverRadio.setAttribute(
+        "style",
+        `font-size: ${this.setting.radioFontSize}px;`
+      );
+    }
+    if (teamConstructors) {
+      teamConstructors.forEach((teamConstructor) => {
+        teamConstructor.setAttribute(
           "style",
-          `font-size: ${driverRadioFontSizeInput}px;`
+          `height: ${this.setting.radioFontSize}px;`
         );
-      }
-      if (driverRadio) {
-        driverRadio.setAttribute(
-          "style",
-          `font-size: ${driverRadioFontSizeInput}px;`
-        );
-      }
-      if (teamConstructors) {
-        teamConstructors.forEach((teamConstructor) => {
-          teamConstructor.setAttribute(
-            "style",
-            `height: ${driverRadioFontSizeInput}px;`
-          );
-        });
-      }
+      });
     }
   }
 
@@ -356,15 +385,26 @@ export default class Dom {
       input.addEventListener("input", (e) => {
         e.preventDefault();
         volumeSelected.innerText = input.value;
-        this.setting.openingRadioVolume = parseInt(input.value) / 100;
+        this.setting.incomingRadioVolume = parseInt(input.value) / 100;
       });
       volumeSelected.innerText = input.value;
-      this.setting.openingRadioVolume = parseInt(input.value) / 100;
+      this.setting.incomingRadioVolume = parseInt(input.value) / 100;
     }
 
-    if (status && status === "ready") {
-      input.value = openingRadioVolume.toString();
-      volumeSelected.innerText = openingRadioVolume.toString();
+    this.openingRadioVolumeSetter();
+  }
+
+  private openingRadioVolumeSetter() {
+    const input = document.getElementById(
+      "openingRadioVolumeInput"
+    ) as HTMLInputElement;
+    const volumeSelected = document.getElementById(
+      "openingRadioVolumeSelected"
+    );
+
+    if (this.setting.status === "ready" && input && volumeSelected) {
+      input.value = this.setting.incomingRadioVolume.toString();
+      volumeSelected.innerText = this.setting.incomingRadioVolume.toString();
     }
   }
 
@@ -380,15 +420,25 @@ export default class Dom {
       input.addEventListener("input", (e) => {
         e.preventDefault();
         volumeSelected.innerText = input.value;
-        this.setting.donationFromVolume = parseInt(input.value) / 100;
+        this.setting.donateFromVolume = parseInt(input.value) / 100;
       });
       volumeSelected.innerText = input.value;
-      this.setting.donationFromVolume = parseInt(input.value) / 100;
+      this.setting.donateFromVolume = parseInt(input.value) / 100;
     }
 
-    if (status && status === "ready") {
-      input.value = donationFromVolume.toString();
-      volumeSelected.innerText = donationFromVolume.toString();
+    this.donationFromVolumeSetter();
+  }
+
+  private donationFromVolumeSetter() {
+    const input = document.getElementById(
+      "donationFromVolumeInput"
+    ) as HTMLInputElement;
+    const volumeSelected = document.getElementById(
+      "donationFromVolumeSelected"
+    );
+    if (this.setting.status === "ready" && input && volumeSelected) {
+      input.value = this.setting.donateFromVolume.toString();
+      volumeSelected.innerText = this.setting.donateFromVolume.toString();
     }
   }
 
@@ -404,15 +454,26 @@ export default class Dom {
       input.addEventListener("input", (e) => {
         e.preventDefault();
         volumeSelected.innerText = input.value;
-        this.setting.donationMessageVolume = parseInt(input.value) / 100;
+        this.setting.donateMessageVolume = parseInt(input.value) / 100;
       });
       volumeSelected.innerText = input.value;
-      this.setting.donationMessageVolume = parseInt(input.value) / 100;
+      this.setting.donateMessageVolume = parseInt(input.value) / 100;
     }
 
-    if (status && status === "ready") {
-      input.value = donationMessageVolume.toString();
-      volumeSelected.innerText = donationMessageVolume.toString();
+    this.donationMessageVolumeSetter();
+  }
+
+  private donationMessageVolumeSetter() {
+    const input = document.getElementById(
+      "donationMessageVolumeInput"
+    ) as HTMLInputElement;
+    const volumeSelected = document.getElementById(
+      "donationMessageVolumeSelected"
+    );
+
+    if (this.setting.status === "ready" && input && volumeSelected) {
+      input.value = this.setting.donateMessageVolume.toString();
+      volumeSelected.innerText = this.setting.donateMessageVolume.toString();
     }
   }
 
@@ -434,9 +495,20 @@ export default class Dom {
       this.setting.radioVoiceEffectDistortionValue = parseInt(input.value);
     }
 
-    if (status && status === "ready") {
-      input.value = radioVoiceEffectDistortionValue.toString();
-      distortionSelected.innerText = radioVoiceEffectDistortionValue.toString();
+    this.distortionInputSetter();
+  }
+
+  private distortionInputSetter() {
+    const input = document.getElementById(
+      "radioVoiceEffectDistortionValue"
+    ) as HTMLInputElement;
+    const distortionSelected = document.getElementById(
+      "radioVoiceEffectDistortionValueSelected"
+    );
+    if (this.setting.status === "ready" && input && distortionSelected) {
+      input.value = this.setting.radioVoiceEffectDistortionValue.toString();
+      distortionSelected.innerText =
+        this.setting.radioVoiceEffectDistortionValue.toString();
     }
   }
 

@@ -73,8 +73,8 @@ export type Queries = {
   streamKey?: string;
   donateDuration?: number;
   radioVoiceEffectDistortionValue?: number;
-  radioVoiceEffect?: boolean;
-  incomingRadio?: boolean;
+  radioVoiceEffect?: "on" | "off";
+  incomingRadio?: "on" | "off";
   driverName?: string;
   status?: "ready";
   team?: Team;

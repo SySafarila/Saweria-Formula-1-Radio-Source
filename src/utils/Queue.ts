@@ -110,9 +110,9 @@ export default class SaweriaQueue {
     }
   }
 
-  private async playOpeningRadio() {
-    if (this.setting.openingRadioSound == "on") {
-      await sound.playOpeningRadio();
+  private async playIncomingRadio() {
+    if (this.setting.incomingRadio === true) {
+      await sound.playIncomingRadio();
     }
   }
 
@@ -124,12 +124,12 @@ export default class SaweriaQueue {
       await sound.playTtsFrom(`data:audio/wav;base64,${tts[0]}`);
     }
     dom.startAudioVisual();
-    await this.playOpeningRadio();
+    await this.playIncomingRadio();
     if (tts[1]) {
       await sound.playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
     }
     dom.stopAudioVisual();
-    await startDelay(this.setting.showMessageTime);
+    await startDelay(this.setting.donateDuration);
     this.hideRadio();
     await startDelay(1000); // delay 1 detik
   }
@@ -137,8 +137,8 @@ export default class SaweriaQueue {
   private async nonTtsHandler() {
     await this.playNotif();
     dom.startAudioVisual();
-    await this.playOpeningRadio();
-    await startDelay(this.setting.showMessageTime);
+    await this.playIncomingRadio();
+    await startDelay(this.setting.donateDuration);
     dom.stopAudioVisual();
     await startDelay(1000); // delay 1 detik
     this.hideRadio();
