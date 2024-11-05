@@ -12,10 +12,16 @@ export default class Dom {
   constructor(setting: SettingClass) {
     this.setting = setting;
 
+    // html input listeners
+    this.inputListeners();
+
+    // apply from current setting
+    this.setDonateFromVolume();
+    this.donationMessageVolumeSetter();
+    this.distortionInputSetter();
+    this.openingRadioVolumeSetter();
     this.hideForm();
     this.startButtonTrigger();
-    this.donateFromVolumeListener();
-    this.donateMessageVolumeListener();
     this.setDonateDurationInput();
     this.setDonateFontSizeInput();
     this.setTeam();
@@ -24,16 +30,21 @@ export default class Dom {
     this.setRadioFontSize();
     this.setIncomingRadio();
     this.setTeamRadio();
-    this.driverNameInputListener();
     this.setDriverName();
     this.donationFontSetter();
     this.driverRadioFontSizeSetter();
+    this.setStreamKey();
+    this.playIncomingRadio();
+  }
+
+  private inputListeners() {
+    this.donateFromVolumeListener();
+    this.donateMessageVolumeListener();
+    this.driverNameInputListener();
     this.distortionInputListener();
     this.radioVoiceEffectListener();
     this.incomingRadioListener();
     this.donateDurationListener();
-    this.setStreamKey();
-    this.playIncomingRadio();
     this.teamSelectorListener();
     this.donateFontSizeListener();
     this.RadioFontSizeListener();
@@ -436,8 +447,6 @@ export default class Dom {
         this.setting.incomingRadioVolume = parseInt(input.value) / 100;
       });
     }
-
-    this.openingRadioVolumeSetter();
   }
 
   private openingRadioVolumeSetter() {
@@ -474,11 +483,9 @@ export default class Dom {
         this.setting.donateFromVolume = parseInt(input.value) / 100;
       });
     }
-
-    this.donationFromVolumeSetter();
   }
 
-  private donationFromVolumeSetter() {
+  private setDonateFromVolume() {
     const input = document.getElementById(
       "donationFromVolumeInput"
     ) as HTMLInputElement;
@@ -511,8 +518,6 @@ export default class Dom {
         this.setting.donateMessageVolume = parseInt(input.value) / 100;
       });
     }
-
-    this.donationMessageVolumeSetter();
   }
 
   private donationMessageVolumeSetter() {
@@ -549,8 +554,6 @@ export default class Dom {
         this.setting.radioVoiceEffectDistortionValue = parseInt(input.value);
       });
     }
-
-    this.distortionInputSetter();
   }
 
   private distortionInputSetter() {
