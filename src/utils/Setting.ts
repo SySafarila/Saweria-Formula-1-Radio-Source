@@ -38,14 +38,14 @@ export default class SettingClass {
   }
 
   private setRadioFontSize() {
-    if (query.radioFontSize && !isNaN(query.radioFontSize)) {
-      this.radioFontSize = query.radioFontSize;
+    if (query.radioFontSize && !isNaN(parseInt(query.radioFontSize))) {
+      this.radioFontSize = parseInt(query.radioFontSize);
     }
   }
 
   private setDonateFontSize() {
-    if (query.donateFontSize && !isNaN(query.donateFontSize)) {
-      this.donateFontSize = query.donateFontSize;
+    if (query.donateFontSize && !isNaN(parseInt(query.donateFontSize))) {
+      this.donateFontSize = parseInt(query.donateFontSize);
     }
   }
 
@@ -67,8 +67,8 @@ export default class SettingClass {
   }
 
   private setShowMessageTime() {
-    if (query.donateDuration && !isNaN(query.donateDuration)) {
-      this.donateDuration = query.donateDuration * 1000;
+    if (query.donateDuration && !isNaN(parseInt(query.donateDuration))) {
+      this.donateDuration = parseInt(query.donateDuration) * 1000;
     }
   }
 

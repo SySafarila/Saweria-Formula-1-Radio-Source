@@ -17,6 +17,7 @@ export default class Dom {
     this.startButtonTrigger();
     this.playSampleDonation();
     this.playIncomingRadio();
+    this.editMode();
 
     // html input listeners
     this.inputListeners();
@@ -55,6 +56,21 @@ export default class Dom {
     this.setDonationFontSize();
     this.setDriverRadioFontSize();
     this.setStreamKey();
+  }
+
+  private editMode() {
+    if (this.setting.status === "ready") {
+      const formSetting = document.getElementById("formSetting");
+
+      document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key === "E") {
+          e.preventDefault();
+          if (formSetting) {
+            formSetting.classList.toggle("hidden");
+          }
+        }
+      });
+    }
   }
 
   private radioVoiceEffectListener() {

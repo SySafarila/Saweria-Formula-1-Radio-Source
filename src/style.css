@@ -14,12 +14,22 @@
     }
 
     .audio-visual {
-        height: 2rem;
+        height: 4rem;
     }
 
     .audio-visual>div {
         height: 5%;
         width: 100%;
+        position: relative;
+    }
+
+    .audio-visual>div::before {
+        content: "";
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-color: inherit;
+        filter: blur(40px);
     }
 }
 
