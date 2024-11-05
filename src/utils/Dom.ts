@@ -12,29 +12,17 @@ export default class Dom {
   constructor(setting: SettingClass) {
     this.setting = setting;
 
+    // other
+    this.hideForm();
+    this.startButtonTrigger();
+    this.playSampleDonation();
+    this.playIncomingRadio();
+
     // html input listeners
     this.inputListeners();
 
     // apply from current setting
-    this.setDonateFromVolume();
-    this.donationMessageVolumeSetter();
-    this.distortionInputSetter();
-    this.openingRadioVolumeSetter();
-    this.hideForm();
-    this.startButtonTrigger();
-    this.setDonateDurationInput();
-    this.setDonateFontSizeInput();
-    this.setTeam();
-    this.setRadioVoiceEffect();
-    this.playSampleDonation();
-    this.setRadioFontSize();
-    this.setIncomingRadio();
-    this.setTeamRadio();
-    this.setDriverName();
-    this.donationFontSetter();
-    this.driverRadioFontSizeSetter();
-    this.setStreamKey();
-    this.playIncomingRadio();
+    this.applyCurrentSettings();
   }
 
   private inputListeners() {
@@ -49,6 +37,24 @@ export default class Dom {
     this.donateFontSizeListener();
     this.RadioFontSizeListener();
     this.incomingRadioVolumeListener();
+  }
+
+  private applyCurrentSettings() {
+    this.setDonateFromVolume();
+    this.setDonateMessageVolume();
+    this.setOpeningRadioVolume();
+    this.setDistortionInput();
+    this.setDonateDurationInput();
+    this.setDonateFontSizeInput();
+    this.setTeam();
+    this.setRadioVoiceEffect();
+    this.setRadioFontSize();
+    this.setIncomingRadio();
+    this.setTeamRadio();
+    this.setDriverName();
+    this.setDonationFontSize();
+    this.setDriverRadioFontSize();
+    this.setStreamKey();
   }
 
   private radioVoiceEffectListener() {
@@ -356,7 +362,7 @@ export default class Dom {
     }
   }
 
-  private donationFontSetter() {
+  private setDonationFontSize() {
     const donationFrom: HTMLElement =
       document.querySelector("#radio #donation");
     const donationMessage: HTMLElement =
@@ -405,7 +411,7 @@ export default class Dom {
     }
   }
 
-  private driverRadioFontSizeSetter() {
+  private setDriverRadioFontSize() {
     const driver = document.querySelector("#radio #driver-name");
     const driverRadio = document.querySelector("#radio #driver-radio");
     const teamConstructors = document.querySelectorAll("#radio #constructor");
@@ -449,7 +455,7 @@ export default class Dom {
     }
   }
 
-  private openingRadioVolumeSetter() {
+  private setOpeningRadioVolume() {
     const input = document.getElementById(
       "openingRadioVolumeInput"
     ) as HTMLInputElement;
@@ -520,7 +526,7 @@ export default class Dom {
     }
   }
 
-  private donationMessageVolumeSetter() {
+  private setDonateMessageVolume() {
     const input = document.getElementById(
       "donationMessageVolumeInput"
     ) as HTMLInputElement;
@@ -556,7 +562,7 @@ export default class Dom {
     }
   }
 
-  private distortionInputSetter() {
+  private setDistortionInput() {
     const input = document.getElementById(
       "radioVoiceEffectDistortionValue"
     ) as HTMLInputElement;
