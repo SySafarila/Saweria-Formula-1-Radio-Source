@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import { sound, startF1Notif } from "..";
+import { queue, sound, startF1Notif } from "..";
 import { Queries } from "../types";
 import SettingClass from "./Setting";
 
@@ -104,7 +104,7 @@ export default class Dom {
     if (button) {
       button.addEventListener("click", (e) => {
         e.preventDefault();
-        sound.playExampleDonation();
+        queue.addExampleDonate();
       });
     }
   }

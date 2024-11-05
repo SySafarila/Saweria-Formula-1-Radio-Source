@@ -1,6 +1,7 @@
-import { dom, socket, sound, startF1Notif } from "..";
+import { dom, queue, socket, sound, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
 import startDelay from "./delay";
+import { exampleDonation } from "./exampleDonation";
 import SettingClass from "./Setting";
 
 export default class SaweriaQueue {
@@ -119,14 +120,21 @@ export default class SaweriaQueue {
   private async ttsHandler() {
     const { tts } = this.getDonation();
 
-    await this.playNotif();
+    await this.playNotif().catch((e) => console.error(e));
     if (tts[0]) {
-      await sound.playTtsFrom(`data:audio/wav;base64,${tts[0]}`);
+      await sound
+        .playTtsFrom(`data:audio/wav;base64,${tts[0]}`)
+        .catch((e) => console.error(e));
     }
+    await this.playIncomingRadio().catch((e) => console.error(e));
     dom.startAudioVisual();
-    await this.playIncomingRadio();
     if (tts[1]) {
-      await sound.playTtsMessage(`data:audio/wav;base64,${tts[1]}`);
+      await sound
+        .playTtsMessage(`data:audio/wav;base64,${tts[1]}`)
+        .catch(async (e) => {
+          console.error(e);
+          await startDelay(1000);
+        });
     }
     dom.stopAudioVisual();
     await startDelay(this.setting.donateDuration);
@@ -135,9 +143,9 @@ export default class SaweriaQueue {
   }
 
   private async nonTtsHandler() {
-    await this.playNotif();
+    await this.playNotif().catch((e) => console.error(e));
     dom.startAudioVisual();
-    await this.playIncomingRadio();
+    await this.playIncomingRadio().catch((e) => console.error(e));
     await startDelay(this.setting.donateDuration);
     dom.stopAudioVisual();
     await startDelay(1000); // delay 1 detik
@@ -171,6 +179,10 @@ export default class SaweriaQueue {
       this.isPlaying = false;
       this.queue.splice(0, 1);
     }
+  }
+
+  addExampleDonate() {
+    queue.addQueue(exampleDonation);
   }
 
   // use arrow function for callback

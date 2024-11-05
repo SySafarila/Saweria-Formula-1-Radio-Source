@@ -33,10 +33,10 @@ export const startF1Notif = () => {
 
 if (status && status == "ready") {
   // OBS Detector
-  const isOBS: boolean = dom.obsDetector();
-  if (isOBS) {
-    dom.hideRadio();
-    dom.hideStartButton();
-    startF1Notif();
-  }
+  // const isOBS: boolean = dom.obsDetector();
+  // if (isOBS) {
+  // }
+  dom.hideRadio();
+  dom.hideStartButton();
+  startF1Notif();
 }

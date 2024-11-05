@@ -1,6 +1,4 @@
-import { queue } from "..";
 import { cashRegisterSound, incomingRadioSound } from "./base64Audios";
-import { exampleDonation } from "./exampleDonation";
 import SettingClass from "./Setting";
 
 export default class Sound {
@@ -54,10 +52,14 @@ export default class Sound {
       try {
         const sound = new Audio(base64);
         sound.volume = this.setting.donateFromVolume;
-        sound.play();
-        sound.addEventListener("pause", () => {
-          resolve("Success!");
-        });
+        sound.play().catch((e) => reject(e));
+        sound.addEventListener(
+          "pause",
+          () => {
+            resolve("Success!");
+          },
+          { once: true }
+        );
       } catch (error) {
         reject("Failed!");
       }
@@ -73,10 +75,14 @@ export default class Sound {
           radioEffect.resume();
         }
         sound.volume = this.setting.donateMessageVolume;
-        sound.play();
-        sound.addEventListener("pause", () => {
-          resolve("Success!");
-        });
+        sound.play().catch((e) => reject(e));
+        sound.addEventListener(
+          "pause",
+          () => {
+            resolve("Success!");
+          },
+          { once: true }
+        );
       } catch (error) {
         reject("Failed!");
       }
@@ -88,10 +94,14 @@ export default class Sound {
       try {
         const sound = new Audio(`data:audio/wav;base64,${incomingRadioSound}`);
         sound.volume = this.setting.incomingRadioVolume;
-        sound.play();
-        sound.addEventListener("pause", () => {
-          resolve("Success!");
-        });
+        sound.play().catch((e) => reject(e));
+        sound.addEventListener(
+          "pause",
+          () => {
+            resolve("Success!");
+          },
+          { once: true }
+        );
       } catch (error) {
         reject("Failed!");
       }
@@ -103,10 +113,14 @@ export default class Sound {
       try {
         const sound = new Audio(`data:audio/wav;base64,${cashRegisterSound}`);
         sound.volume = this.setting.incomingRadioVolume;
-        sound.play();
-        sound.addEventListener("pause", () => {
-          resolve("Success!");
-        });
+        sound.play().catch((e) => reject(e));
+        sound.addEventListener(
+          "pause",
+          () => {
+            resolve("Success!");
+          },
+          { once: true }
+        );
       } catch (error) {
         reject("Failed!");
       }
@@ -118,17 +132,17 @@ export default class Sound {
       try {
         const sound = new Audio(url);
         sound.volume = this.setting.incomingRadioVolume;
-        sound.play();
-        sound.addEventListener("pause", () => {
-          resolve("Success!");
-        });
+        sound.play().catch((e) => reject(e));
+        sound.addEventListener(
+          "pause",
+          () => {
+            resolve("Success!");
+          },
+          { once: true }
+        );
       } catch (error) {
         reject("Failed!");
       }
     });
-  }
-
-  playExampleDonation() {
-    queue.addQueue(exampleDonation);
   }
 }
