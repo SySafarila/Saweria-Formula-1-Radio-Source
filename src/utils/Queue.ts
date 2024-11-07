@@ -1,17 +1,14 @@
-import { dom, queue, socket, sound, startF1Notif } from "..";
+import { dom, queue, setting, socket, sound, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
 import startDelay from "./delay";
 import { exampleDonation } from "./exampleDonation";
-import SettingClass from "./Setting";
 
 export default class SaweriaQueue {
-  private setting: SettingClass;
   private isPlaying: boolean = false;
   private queue: SaweriaDonation[] = [];
   private customSaweriaNotifUrl: string | undefined = undefined;
 
-  constructor(setting: SettingClass) {
-    this.setting = setting;
+  constructor() {
     console.log("Saweria Queue Init");
   }
 
@@ -112,7 +109,7 @@ export default class SaweriaQueue {
   }
 
   private async playIncomingRadio() {
-    if (this.setting.incomingRadio === true) {
+    if (setting.incomingRadio === true) {
       await sound.playIncomingRadio();
     }
   }
@@ -137,7 +134,7 @@ export default class SaweriaQueue {
         });
     }
     dom.stopAudioVisual();
-    await startDelay(this.setting.donateDuration);
+    await startDelay(setting.donateDuration);
     this.hideRadio();
     await startDelay(1000); // delay 1 detik
   }
@@ -146,7 +143,7 @@ export default class SaweriaQueue {
     await this.playNotif().catch((e) => console.error(e));
     dom.startAudioVisual();
     await this.playIncomingRadio().catch((e) => console.error(e));
-    await startDelay(this.setting.donateDuration);
+    await startDelay(setting.donateDuration);
     dom.stopAudioVisual();
     await startDelay(1000); // delay 1 detik
     this.hideRadio();
@@ -182,7 +179,7 @@ export default class SaweriaQueue {
   }
 
   addExampleDonate() {
-    queue.addQueue(exampleDonation);
+    this.addQueue(exampleDonation);
   }
 
   // use arrow function for callback

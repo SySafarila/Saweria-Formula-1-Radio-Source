@@ -7,10 +7,10 @@ import Sound from "./utils/Sound";
 
 const parsed = queryString.parse(location.search) as Queries;
 const { status } = parsed;
-const setting = new SettingClass();
-export const sound = new Sound(setting);
-export const queue = new SaweriaQueue(setting);
-export const dom = new Dom(setting);
+export const setting = new SettingClass();
+export const sound = new Sound();
+export const queue = new SaweriaQueue();
+export const dom = new Dom();
 export let socket: WebSocket;
 
 export const startF1Notif = () => {
