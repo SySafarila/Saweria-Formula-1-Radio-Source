@@ -185,11 +185,25 @@ export default class SaweriaQueue {
   // use arrow function for callback
   onOpen = (): void => {
     console.log("Socket open");
-    socket.send("PING!");
+    socket.send(
+      JSON.stringify({
+        protocol: "json",
+        version: 1,
+      }) + "\u001E"
+    );
   };
 
   // use arrow function for callback
-  onMessage = (e: { data: any }): void => {
+  onMessage = (e: { data: string }): void => {
+    const parsedData = JSON.parse(e.data.split("\u001E")[0]) as {
+      type: number;
+    };
+
+    if (parsedData.type == 6) {
+      socket.send(e.data);
+    }
+
+    return console.log(parsedData);
     const donation_json: SaweriaMessage = JSON.parse(e.data);
     const donations = donation_json.data;
 

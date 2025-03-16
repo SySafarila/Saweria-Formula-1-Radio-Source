@@ -55,6 +55,7 @@ type Team =
 
 export type Settings = {
   streamKey: string;
+  token: string;
   donateDuration: number;
   radioVoiceEffectDistortionValue: number;
   radioVoiceEffect: boolean;
@@ -71,6 +72,7 @@ export type Settings = {
 
 export type Queries = {
   streamKey?: string;
+  token: string;
   donateDuration?: string;
   radioVoiceEffectDistortionValue?: string;
   radioVoiceEffect?: "on" | "off";

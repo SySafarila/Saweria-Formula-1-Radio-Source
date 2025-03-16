@@ -17,7 +17,7 @@ export const startF1Notif = () => {
   console.log("Starting F1 Notif");
 
   socket = new WebSocket(
-    `wss://events.saweria.co/stream?streamKey=${setting.streamKey}`
+    `wss://ws.bagibagi.co/ws/overlay?streamkey=${setting.streamKey}&id=${setting.token}`
   );
 
   socket.addEventListener("open", queue.onOpen, {

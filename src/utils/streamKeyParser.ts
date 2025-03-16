@@ -1,17 +1,24 @@
-import queryString from "query-string";
+import axios from "axios";
 
-const streamKeyParser = (streamKey: string) => {
+const streamKeyParser = async (
+  url: string
+): Promise<{ streamkey: string; token: string }> => {
   try {
-    const url = new URL(streamKey);
-    const parsed = queryString.parse(url.search) as {
-      streamKey?: string;
-    };
-
-    if (!parsed.streamKey) {
-      throw new Error("Stream Key not provided!");
+    const split = url.split("/");
+    const streamkey = split[split.length - 1];
+    if (streamkey == "") {
+      throw new Error("Invalid URL");
     }
 
-    return parsed.streamKey;
+    const token = await axios.post(
+      `https://ws.bagibagi.co/ws/overlay/negotiate?streamkey=${streamkey}&negotiateVersion=1`
+    );
+    const data = token.data as { connectionToken: string };
+
+    return {
+      streamkey: streamkey,
+      token: data.connectionToken,
+    };
   } catch (error: any) {
     throw new Error(error.message ?? "Invalid URL");
   }

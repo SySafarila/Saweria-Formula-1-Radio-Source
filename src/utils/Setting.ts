@@ -6,6 +6,7 @@ const query = queryString.parse(location.search) as Queries;
 
 export default class SettingClass {
   streamKey: Settings["streamKey"] = "your-stream-key";
+  token: Settings["token"] = "your-token";
   donateDuration: Settings["donateDuration"] = 5000;
   radioVoiceEffect: Settings["radioVoiceEffect"] = true;
   radioVoiceEffectDistortionValue: Settings["radioVoiceEffectDistortionValue"] = 200;
@@ -55,10 +56,12 @@ export default class SettingClass {
     }
   }
 
-  private setStreamKey() {
+  private async setStreamKey() {
     if (query.streamKey) {
       try {
-        this.streamKey = streamKeyParser(query.streamKey);
+        const parsed = await streamKeyParser(query.streamKey);
+        this.streamKey = parsed.streamkey;
+        this.token = parsed.token;
       } catch (error: any) {
         window.alert(error.message);
         window.location.href = window.location.pathname;
