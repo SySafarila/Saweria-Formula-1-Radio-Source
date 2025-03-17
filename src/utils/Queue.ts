@@ -120,8 +120,8 @@ export default class SaweriaQueue {
 
     // cash register notif
     await this.playNotif().catch((e) => console.error(e));
-    dom.startAudioVisual();
     await this.playIncomingRadio().catch((e) => console.error(e));
+    dom.startAudioVisual();
     if (tts[0]) {
       await sound.playTtsMessage(`${tts[0]}`).catch((e) => console.error(e));
     }
