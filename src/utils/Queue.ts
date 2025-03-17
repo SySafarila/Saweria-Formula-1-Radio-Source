@@ -1,3 +1,4 @@
+import axios from "axios";
 import { dom, queue, setting, socket, sound, startF1Notif } from "..";
 import { SaweriaAlertGif, SaweriaDonation, SaweriaMessage } from "../types";
 import startDelay from "./delay";
@@ -117,22 +118,19 @@ export default class SaweriaQueue {
   private async ttsHandler() {
     const { tts } = this.getDonation();
 
+    // cash register notif
     await this.playNotif().catch((e) => console.error(e));
-    if (tts[0]) {
-      await sound
-        .playTtsFrom(`data:audio/wav;base64,${tts[0]}`)
-        .catch((e) => console.error(e));
-    }
-    await this.playIncomingRadio().catch((e) => console.error(e));
     dom.startAudioVisual();
-    if (tts[1]) {
-      await sound
-        .playTtsMessage(`data:audio/wav;base64,${tts[1]}`)
-        .catch(async (e) => {
-          console.error(e);
-          await startDelay(1000);
-        });
+    await this.playIncomingRadio().catch((e) => console.error(e));
+    if (tts[0]) {
+      await sound.playTtsMessage(`${tts[0]}`).catch((e) => console.error(e));
     }
+    // if (tts[1]) {
+    //   await sound.playTtsMessage(`${tts[1]}`).catch(async (e) => {
+    //     console.error(e);
+    //     await startDelay(1000);
+    //   });
+    // }
     dom.stopAudioVisual();
     await startDelay(setting.donateDuration);
     this.hideRadio();
@@ -194,18 +192,73 @@ export default class SaweriaQueue {
   };
 
   // use arrow function for callback
-  onMessage = (e: { data: string }): void => {
+  onMessage = async (e: { data: string }): Promise<void> => {
     const parsedData = JSON.parse(e.data.split("\u001E")[0]) as {
       type: number;
+      target: "UserDonated";
+      arguments: {
+        amount: number;
+        message: string;
+        preferedName: string;
+        mediaShare: string;
+      }[];
     };
 
     if (parsedData.type == 6) {
       socket.send(e.data);
     }
 
-    return console.log(parsedData);
-    const donation_json: SaweriaMessage = JSON.parse(e.data);
+    console.log(parsedData);
+
+    if (
+      parsedData.type != 1 ||
+      parsedData.arguments[0].mediaShare != "" ||
+      parsedData.target != "UserDonated"
+    ) {
+      return;
+    }
+
+    let tts: string | null = null;
+    try {
+      const resTts = await axios.post(
+        "https://bagibagi.co/api/tts",
+        {
+          voiceName: "male",
+          message: `${parsedData.arguments[0].preferedName} bagi bagi ${parsedData.arguments[0].amount} koin. Pesan: ${parsedData.arguments[0].message}`,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          responseType: "blob",
+        }
+      );
+
+      const url = URL.createObjectURL(resTts.data);
+      tts = url;
+    } catch (error) {
+      tts = null;
+    }
+
+    const donation_json: SaweriaMessage = {
+      data: [
+        {
+          amount: parsedData.arguments[0].amount,
+          currency: "IDR",
+          donator: parsedData.arguments[0].preferedName,
+          is_message_flagged: false,
+          is_name_flagged: false,
+          is_replay: false,
+          is_user: false,
+          message: parsedData.arguments[0].message,
+          tts: [tts],
+        },
+      ],
+      type: "donation",
+    };
     const donations = donation_json.data;
+    console.log(donations);
 
     donations.forEach((donation) => {
       const media = donation.media as SaweriaAlertGif | null;
