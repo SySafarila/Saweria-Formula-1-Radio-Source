@@ -9,3 +9,8 @@ Untuk versi bagibagi.co, silahkan jalankan program berikut dengan menekan `Windo
 ```sh
 "C:\Program Files\obs-studio\bin\64bit\obs64.exe" --disable-web-security --disable-site-isolation-trials
 ```
+
+# Untuk development
+```sh
+chrome.exe --disable-web-security --user-data-dir="C:\chrome_dev"
+```
