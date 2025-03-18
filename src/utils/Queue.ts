@@ -70,9 +70,9 @@ export default class SaweriaQueue {
         if (dnt) {
           dnt.innerHTML =
             this.messageProcessor(
-              `${donation.donator} ${
-                donation.currency == "IDR" ? "Rp " : donation.currency
-              } ${this.numberFormat(donation.amount)}`
+              `${donation.donator} bagi-bagi ${this.numberFormat(
+                donation.amount
+              )} Koin`
             ) ?? "-";
         }
         radioEl.classList.remove("hidden");
