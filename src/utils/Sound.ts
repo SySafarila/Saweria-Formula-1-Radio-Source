@@ -1,147 +1,43 @@
-import { setting } from "..";
-import { cashRegisterSound, incomingRadioSound } from "./base64Audios";
+import {cashRegisterSound} from "./base64Audios";
 
 export default class Sound {
-  constructor() {
-    //
-  }
-
-  private makeDistortionCurve(amount: number) {
-    const n_samples = 44100;
-    const curve = new Float32Array(n_samples);
-    const deg = Math.PI / 180;
-    for (let i = 0; i < n_samples; ++i) {
-      const x = (i * 2) / n_samples - 1;
-      curve[i] =
-        ((3 + amount) * x * 20 * deg) / (Math.PI + amount * Math.abs(x));
+    static playCashRegister() {
+        return new Promise((resolve, reject) => {
+            try {
+                const sound = new Audio(`data:audio/wav;base64,${cashRegisterSound}`)
+                sound.play().catch((e) => reject(e));
+                sound.addEventListener(
+                    "ended",
+                    () => {
+                        resolve("Success!");
+                    },
+                    {
+                        once: true
+                    }
+                );
+            } catch (e) {
+                reject("Failed to play Cash Register")
+            }
+        })
     }
-    return curve;
-  }
 
-  private makeRadioEffect(audio: HTMLAudioElement): AudioContext {
-    const lowpassValue = 3000;
-    const highpassValue = 500;
-    const distortionValue = setting.radioVoiceEffectDistortionValue ?? 200;
-
-    const audioContext = new window.AudioContext();
-    const source = audioContext.createMediaElementSource(audio);
-
-    const lowpassFilter = audioContext.createBiquadFilter();
-    lowpassFilter.type = "lowpass";
-    lowpassFilter.frequency.value = lowpassValue;
-
-    const highpassFilter = audioContext.createBiquadFilter();
-    highpassFilter.type = "highpass";
-    highpassFilter.frequency.value = highpassValue;
-
-    const distortion = audioContext.createWaveShaper();
-    distortion.curve = this.makeDistortionCurve(distortionValue);
-    distortion.oversample = "4x";
-
-    source.connect(highpassFilter);
-    highpassFilter.connect(lowpassFilter);
-    lowpassFilter.connect(distortion);
-    distortion.connect(audioContext.destination);
-
-    return audioContext;
-  }
-
-  playTtsFrom(base64: string) {
-    return new Promise((resolve, reject) => {
-      try {
-        const sound = new Audio(base64);
-        sound.volume = setting.donateFromVolume;
-        sound.play().catch((e) => reject(e));
-        sound.addEventListener(
-          "pause",
-          () => {
-            resolve("Success!");
-          },
-          { once: true }
-        );
-      } catch (error) {
-        reject("Failed!");
-      }
-    });
-  }
-
-  playTtsMessage(base64: string) {
-    return new Promise((resolve, reject) => {
-      try {
-        const sound = new Audio(base64);
-        if (setting.radioVoiceEffect == true) {
-          const radioEffect = this.makeRadioEffect(sound);
-          radioEffect.resume();
-        }
-        sound.volume = setting.donateMessageVolume;
-        sound.play().catch((e) => reject(e));
-        sound.addEventListener(
-          "pause",
-          () => {
-            resolve("Success!");
-          },
-          { once: true }
-        );
-      } catch (error) {
-        reject("Failed!");
-      }
-    });
-  }
-
-  playIncomingRadio() {
-    return new Promise((resolve, reject) => {
-      try {
-        const sound = new Audio(`data:audio/wav;base64,${incomingRadioSound}`);
-        sound.volume = setting.incomingRadioVolume;
-        sound.play().catch((e) => reject(e));
-        sound.addEventListener(
-          "pause",
-          () => {
-            resolve("Success!");
-          },
-          { once: true }
-        );
-      } catch (error) {
-        reject("Failed!");
-      }
-    });
-  }
-
-  playCashRegister() {
-    return new Promise((resolve, reject) => {
-      try {
-        const sound = new Audio(`data:audio/wav;base64,${cashRegisterSound}`);
-        sound.volume = setting.incomingRadioVolume;
-        sound.play().catch((e) => reject(e));
-        sound.addEventListener(
-          "pause",
-          () => {
-            resolve("Success!");
-          },
-          { once: true }
-        );
-      } catch (error) {
-        reject("Failed!");
-      }
-    });
-  }
-
-  playCustomSaweriaNotif(url: string) {
-    return new Promise((resolve, reject) => {
-      try {
-        const sound = new Audio(url);
-        sound.volume = setting.incomingRadioVolume;
-        sound.play().catch((e) => reject(e));
-        sound.addEventListener(
-          "pause",
-          () => {
-            resolve("Success!");
-          },
-          { once: true }
-        );
-      } catch (error) {
-        reject("Failed!");
-      }
-    });
-  }
+    static async playTextToSpeech(tts: string) {
+        return new Promise((resolve, reject) => {
+            try {
+                const sound = new Audio(`data:audio/wav;base64,${tts}`)
+                sound.play().catch((e) => reject(e));
+                sound.addEventListener(
+                    "ended",
+                    () => {
+                        resolve("Success!");
+                    },
+                    {
+                        once: true
+                    }
+                );
+            } catch (e) {
+                reject("Failed to play Cash Register")
+            }
+        })
+    }
 }
