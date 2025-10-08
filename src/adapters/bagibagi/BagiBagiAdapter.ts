@@ -16,10 +16,6 @@ export default class BagiBagiAdapter extends Adapter<Promise<void>> {
             }[];
         };
 
-        // if (parsedData.type == 6) {
-        //     socket.send(e.data);
-        // }
-
         if (
             parsedData.type != 1 ||
             parsedData.arguments[0].mediaShare != "" ||
@@ -29,6 +25,23 @@ export default class BagiBagiAdapter extends Adapter<Promise<void>> {
         }
 
         // TODO: parsing TTS
+        let tts: string | null = null;
+        axios.post(
+            "https://bagibagi.co/api/tts",
+            {
+                voiceName: "male",
+                message: `${parsedData.arguments[0].preferedName} bagi bagi ${parsedData.arguments[0].amount} koin. Pesan: ${parsedData.arguments[0].message}`,
+            },
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                responseType: "blob",
+            }
+        ).then((response) => {
+            tts = URL.createObjectURL(response.data);
+        }).catch(() => tts = null);
 
         return parsedData.arguments
             .map((donation) => {
@@ -37,7 +50,7 @@ export default class BagiBagiAdapter extends Adapter<Promise<void>> {
                     amount: donation.amount,
                     currency: "IDR",
                     donatorName: donation.preferedName,
-                    textToSpeeches: []
+                    textToSpeeches: [tts]
                 });
             });
 
@@ -76,7 +89,21 @@ export default class BagiBagiAdapter extends Adapter<Promise<void>> {
         );
     }
 
-    socketMessageHandler = async (msg: MessageEvent, queue: Queue) => {
+    socketMessageHandler = async (msg: MessageEvent, queue: Queue, socket: WebSocket) => {
+        const parsedData = JSON.parse(msg.data.split("\u001E")[0]) as {
+            type: number;
+            target: "UserDonated";
+            arguments: {
+                amount: number;
+                message: string;
+                preferedName: string;
+                mediaShare: string;
+            }[];
+        };
+
+        if (parsedData.type == 6) {
+            socket.send(msg.data);
+        }
         const donations = this.toDonation(msg);
 
         for (const donation of donations) {

@@ -6,7 +6,7 @@ export default class Listener {
     private socket: WebSocket;
     private adapter: Adapter;
 
-    private handleMessage = (msg: MessageEvent) => this.adapter.socketMessageHandler(msg, this.queue);
+    private handleMessage = (msg: MessageEvent) => this.adapter.socketMessageHandler(msg, this.queue, this.socket);
     private handleOpen = () => this.adapter.socketOpenHandler(this.socket);
     private handleClose = () => this.adapter.socketCloseHandler(this);
 

@@ -76,7 +76,7 @@ export default class Adapter<T = void> implements IAdapter<T> {
         listener.listen();
     }
 
-    socketMessageHandler = async (msg: MessageEvent, queue: Queue) => {
+    socketMessageHandler = async (msg: MessageEvent, queue: Queue, socket: WebSocket) => {
         const donations = this.toDonation(msg);
 
         for (const donation of donations) {
