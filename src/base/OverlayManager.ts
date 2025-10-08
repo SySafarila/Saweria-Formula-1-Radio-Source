@@ -11,12 +11,13 @@ type Options = {
     provider: Provider;
     overlayType: OverlayType;
     sourceOverlayUrl: string;
+    parentHtmlElement: Element
 }
 
 export default class OverlayManager {
     init(options: Options) {
         console.info("Connecting...")
-        const htmlElement = document.querySelector('#overlay')
+        const htmlElement = options.parentHtmlElement
         if (!htmlElement) throw new Error("No overlay element found");
 
         const sourceOverlayUrl: string = options.sourceOverlayUrl;
