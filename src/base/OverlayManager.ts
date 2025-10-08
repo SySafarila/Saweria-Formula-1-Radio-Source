@@ -27,10 +27,9 @@ export default class OverlayManager {
                 adapter = new SaweriaAdapter(sourceOverlayUrl)
                 break;
             case "BagiBagi":
-                adapter = new Adapter(sourceOverlayUrl)
-                break;
+                throw new Error("Adapter for BagiBagi not implemented yet")
             default:
-                adapter = new Adapter(sourceOverlayUrl);
+                throw new Error("please choose supported adapter: Saweria or BagiBagi")
         }
 
         let overlay: Overlay;
@@ -42,7 +41,7 @@ export default class OverlayManager {
                 overlay = new Formula1Overlay(htmlElement);
                 break;
             default:
-                overlay = new Overlay(htmlElement);
+                throw new Error("Please choose supported overlay overlay type: Basic or Formula 1");
         }
 
         const queue = new Queue(overlay)
