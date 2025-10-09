@@ -4,6 +4,7 @@ import Listener from "./Listener";
 import Adapter from "./Adapter";
 import SaweriaAdapter from "../adapters/saweria/SaweriaAdapter";
 import Formula1Overlay from "../overlays/Formula1Overlay";
+import BagiBagiAdapter from "../adapters/bagibagi/BagiBagiAdapter";
 
 type Provider = "Saweria" | "BagiBagi"
 type OverlayType = "Basic" | "Formula 1"
@@ -15,20 +16,23 @@ type Options = {
 }
 
 export default class OverlayManager {
-    init(options: Options) {
+    async init(options: Options) {
         console.info("Connecting...")
         const htmlElement = options.parentHtmlElement
         if (!htmlElement) throw new Error("No overlay element found");
 
         const sourceOverlayUrl: string = options.sourceOverlayUrl;
 
-        let adapter: Adapter;
+        let adapter: Adapter<void | Promise<void>>;
         switch (options.provider) {
             case "Saweria":
                 adapter = new SaweriaAdapter(sourceOverlayUrl)
+                adapter.init()
                 break;
             case "BagiBagi":
-                throw new Error("Adapter for BagiBagi not implemented yet")
+                adapter = new BagiBagiAdapter(sourceOverlayUrl)
+                await adapter.init()
+                break;
             default:
                 throw new Error("please choose supported adapter: Saweria or BagiBagi")
         }

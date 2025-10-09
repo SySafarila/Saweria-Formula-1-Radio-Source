@@ -6,6 +6,10 @@ export default class Listener {
     private socket: WebSocket;
     private adapter: Adapter;
 
+    private handleMessage = (msg: MessageEvent) => this.adapter.socketMessageHandler(msg, this.queue, this.socket);
+    private handleOpen = () => this.adapter.socketOpenHandler(this.socket);
+    private handleClose = () => this.adapter.socketCloseHandler(this);
+
     constructor(queue: Queue, adapter: Adapter) {
         this.queue = queue;
         this.adapter = adapter;
@@ -13,32 +17,14 @@ export default class Listener {
 
     public listen() {
         this.socket = new WebSocket(this.adapter.webSocketUrl);
-        this.socket.addEventListener("open", this.socketOpenHandler, {
-            once: true,
-        });
-        this.socket.addEventListener("message", this.socketMessageHandler);
-        this.socket.addEventListener("close", this.socketCloseHandler, {
-            once: true,
-        });
+        this.socket.addEventListener("open", this.handleOpen, { once: true });
+        this.socket.addEventListener("message", this.handleMessage);
+        this.socket.addEventListener("close", this.handleClose, { once: true });
     }
 
-    private socketOpenHandler = () => {
-        console.log("Connected to notification server");
-        this.socket.send("PING!");
-    }
-
-    private socketCloseHandler = () => {
-        console.log("Disconnected from notification server");
-        this.socket.removeEventListener("message", this.socketMessageHandler, true);
-        console.log("Reconnecting to notification server");
-        this.listen()
-    }
-
-    private socketMessageHandler = async (msg: MessageEvent) => {
-        const donations = this.adapter.toDonation(msg);
-
-        for (const donation of donations) {
-            await this.queue.addDonationToQueue(donation);
-        }
+    public cleanup() {
+        this.socket.removeEventListener("open", this.handleOpen);
+        this.socket.removeEventListener("message", this.handleMessage);
+        this.socket.removeEventListener("close", this.handleClose);
     }
 }

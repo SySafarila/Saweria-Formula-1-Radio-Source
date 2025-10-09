@@ -1,23 +1,31 @@
 import {SaweriaMessage} from "../adapters/saweria/dto/saweria_dto";
 import Donation from "./Donation";
 import queryString from "query-string";
+import Queue from "./Queue";
+import Listener from "./Listener";
 
-export interface IAdapter {
+export interface IAdapter<T> {
     sourceOverlayUrl: string;
     webSocketUrl: string;
 
     toDonation(msg: MessageEvent): Donation[];
 
     parseWebsocketUrl(): void
+
+    init(): T
 }
 
-export default class Adapter implements IAdapter {
+export default class Adapter<T = void> implements IAdapter<T> {
     sourceOverlayUrl: string;
     webSocketUrl: string;
 
     constructor(sourceOverlayUrl: string) {
         this.sourceOverlayUrl = sourceOverlayUrl;
-        this.parseWebsocketUrl()
+    }
+
+    init(): T {
+        this.parseWebsocketUrl();
+        return;
     }
 
     toDonation(msg: MessageEvent): Donation[] {
@@ -55,4 +63,25 @@ export default class Adapter implements IAdapter {
             throw new Error(error.message ?? "Invalid source overlay URL");
         }
     }
+
+    socketOpenHandler = (socket: WebSocket) => {
+        console.log("Connected to notification server");
+        socket.send("PING!");
+    }
+
+    socketCloseHandler = (listener: Listener) => {
+        console.log("Disconnected from notification server");
+        listener.cleanup();
+        console.log("Reconnecting to notification server...");
+        listener.listen();
+    }
+
+    socketMessageHandler = async (msg: MessageEvent, queue: Queue, socket: WebSocket) => {
+        const donations = this.toDonation(msg);
+
+        for (const donation of donations) {
+            await queue.addDonationToQueue(donation);
+        }
+    }
+
 }
