@@ -8,11 +8,17 @@ export interface IAdapter<T> {
     sourceOverlayUrl: string;
     webSocketUrl: string;
 
+    init(): T
+
     toDonation(msg: MessageEvent): Donation[];
 
     parseWebsocketUrl(): void
 
-    init(): T
+    socketOpenHandler(socket: WebSocket): void
+
+    socketCloseHandler(listener: Listener, socket: WebSocket): void
+
+    socketMessageHandler(msg: MessageEvent, queue: Queue, socket: WebSocket): Promise<void>
 }
 
 export default class Adapter<T = void> implements IAdapter<T> {
@@ -69,13 +75,6 @@ export default class Adapter<T = void> implements IAdapter<T> {
         socket.send("PING!");
     }
 
-    socketCloseHandler = (listener: Listener) => {
-        console.log("Disconnected from notification server");
-        listener.cleanup();
-        console.log("Reconnecting to notification server...");
-        listener.listen();
-    }
-
     socketMessageHandler = async (msg: MessageEvent, queue: Queue, socket: WebSocket) => {
         const donations = this.toDonation(msg);
 
@@ -84,4 +83,10 @@ export default class Adapter<T = void> implements IAdapter<T> {
         }
     }
 
+    socketCloseHandler = (listener: Listener, socket: WebSocket) => {
+        console.log("Disconnected from notification server");
+        listener.cleanup();
+        console.log("Reconnecting to notification server...");
+        listener.listen();
+    }
 }

@@ -1,24 +1,118 @@
 import Overlay, {ShowOverlayOptions} from "../base/Overlay";
 import startDelay from "../utils/delay";
+import queryString from "query-string";
+
+type TeamConstructor =
+    | "ferrari"
+    | "mercedes"
+    | "redbull"
+    | "mclaren"
+    | "aston-martin"
+    | "haas"
+    | "rb"
+    | "williams"
+    | "alpine"
+    | "sauber";
 
 export default class Formula1Overlay extends Overlay {
     private intervals: NodeJS.Timeout[] = [];
+    private teamConstructor: TeamConstructor = "ferrari";
+    private driverName: string = "Syahrul";
+    private isConfigured: boolean = false;
+
+    private setTeamConstructor() {
+        const query = queryString.parse(location.search) as {
+            teamConstructor: TeamConstructor;
+        }
+        this.teamConstructor = query.teamConstructor ?? "ferrari";
+    }
+
+    private setDriverName() {
+        const query = queryString.parse(location.search) as {
+            driverName: string;
+        }
+        this.driverName = query.driverName ?? "Syahrul";
+    }
+
+    private checkIsConfigured() {
+        const query = queryString.parse(location.search) as {
+            isConfigured: "YES" | "NO";
+        }
+        query.isConfigured == "YES" ? this.isConfigured = true : this.isConfigured = false;
+    }
 
     initTemplate() {
-        this.htmlParent.innerHTML = `<div class="ferrari" id="radio">
+        this.setTeamConstructor();
+        this.setDriverName();
+        this.checkIsConfigured()
+
+        if (!this.isConfigured) {
+            this.htmlConfig.classList.remove("hidden");
+            this.htmlConfig.innerHTML = `<form
+      action=""
+      method="get"
+      id="formSetting"
+      class="p-2 grid grid-cols-2 md:grid-cols-3 w-full gap-2"
+    >
+      <input type="hidden" name="isConfigured" value="YES" />
+      <div class="flex flex-col gap-1">
+        <label for="driverNameInput">Driver Name</label>
+        <input
+          type="text"
+          name="driverName"
+          id="driverNameInput"
+          class="border border-black rounded px-5 py-3"
+          placeholder="Driver Name"
+          value="Denaldi"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="teams">Teams</label>
+        <select
+          name="teamConstructor"
+          id="teams"
+          class="border-black border rounded px-5 py-3"
+        >
+          <option class="capitalize" value="ferrari">Ferrari</option>
+          <option class="capitalize" value="mercedes">Mercedes</option>
+          <option class="capitalize" value="redbull">Red Bull</option>
+          <option class="capitalize" value="mclaren">Mclaren</option>
+          <option class="capitalize" value="aston-martin">Aston Martin</option>
+          <option class="uppercase" value="haas">HAAS</option>
+          <option class="uppercase" value="rb">VCARB</option>
+          <option class="capitalize" value="williams">Williams</option>
+          <option class="capitalize" value="alpine">Alpine</option>
+          <option class="capitalize" value="sauber">Kick Sauber</option>
+        </select>
+      </div>
+      <div
+        class="grid grid-cols-1 gap-2 col-span-2 md:col-span-1 md:col-start-2"
+      >
+        <button
+          type="submit"
+          class="px-5 py-3 bg-green-500 text-white rounded hover:bg-green-600"
+        >
+          Finish Config
+        </button>
+      </div>
+    </form>`
+        }
+
+        this.htmlParent.innerHTML = `<div class="${this.teamConstructor}" id="radio">
       <div class="bg-driver">
         <div class="flex flex-col items-end w-full p-4 gap-2">
           <span
             class="uppercase font-f1-bold font-bold text-4xl italic break-words text-right leading-none"
             id="driver-name"
-            >Syahrul</span
+            >${this.driverName}</span
           >
           <div class="flex items-center gap-x-2 w-full justify-end">
             <img
-              src="./images/ferrari-ges.svg"
-              alt="Ferrari"
+              src="./images/${this.teamConstructor}.svg"
+              alt="${this.teamConstructor}"
               id="constructor"
-              data-constructor="ferrari"
+              data-constructor="${this.teamConstructor}"
             />
             <span
               class="uppercase text-white font-f1-bold font-bold -mt-[6px] text-4xl italic text-right break-words leading-none"
@@ -100,20 +194,22 @@ export default class Formula1Overlay extends Overlay {
         await startDelay(options.delayToDisplay);
         console.info("Display overlay")
 
-        // play cash register sound
-        this.playNotification();
-
         // display overlay
         this.htmlParent.classList.remove('hidden');
+
+        // play cash register sound
+        await this.playNotification();
 
         // start audio visual
         this.startAudioVisual();
 
-        // delay before stop audio visual
-        await startDelay(5000)
+        await this.playTts(options.donation.textToSpeeches)
 
         // stop audio visual
         this.stopAudioVisual();
+
+        // delay before stop audio visual
+        await startDelay(5000)
 
         // delay before hide overlay
         await startDelay(options.delayToHide)

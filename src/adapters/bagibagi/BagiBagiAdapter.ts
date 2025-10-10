@@ -2,19 +2,12 @@ import Adapter from "../../base/Adapter";
 import Donation from "../../base/Donation";
 import axios from 'axios'
 import Queue from "../../base/Queue";
+import {BagiBagiDonation} from "./dto/bagibagi_dto";
+import Listener from "../../base/Listener";
 
 export default class BagiBagiAdapter extends Adapter<Promise<void>> {
     toDonation(msg: MessageEvent): Donation[] {
-        const parsedData = JSON.parse(msg.data.split("\u001E")[0]) as {
-            type: number;
-            target: "UserDonated";
-            arguments: {
-                amount: number;
-                message: string;
-                preferedName: string;
-                mediaShare: string;
-            }[];
-        };
+        const parsedData = JSON.parse(msg.data.split("\u001E")[0]) as BagiBagiDonation;
 
         if (
             parsedData.type != 1 ||
@@ -24,25 +17,6 @@ export default class BagiBagiAdapter extends Adapter<Promise<void>> {
             return [];
         }
 
-        // TODO: parsing TTS
-        let tts: string | null = null;
-        axios.post(
-            "https://bagibagi.co/api/tts",
-            {
-                voiceName: "male",
-                message: `${parsedData.arguments[0].preferedName} bagi bagi ${parsedData.arguments[0].amount} koin. Pesan: ${parsedData.arguments[0].message}`,
-            },
-            {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                responseType: "blob",
-            }
-        ).then((response) => {
-            tts = URL.createObjectURL(response.data);
-        }).catch(() => tts = null);
-
         return parsedData.arguments
             .map((donation) => {
                 return new Donation({
@@ -50,7 +24,7 @@ export default class BagiBagiAdapter extends Adapter<Promise<void>> {
                     amount: donation.amount,
                     currency: "IDR",
                     donatorName: donation.preferedName,
-                    textToSpeeches: [tts]
+                    textToSpeeches: []
                 });
             });
 
@@ -90,16 +64,7 @@ export default class BagiBagiAdapter extends Adapter<Promise<void>> {
     }
 
     socketMessageHandler = async (msg: MessageEvent, queue: Queue, socket: WebSocket) => {
-        const parsedData = JSON.parse(msg.data.split("\u001E")[0]) as {
-            type: number;
-            target: "UserDonated";
-            arguments: {
-                amount: number;
-                message: string;
-                preferedName: string;
-                mediaShare: string;
-            }[];
-        };
+        const parsedData = JSON.parse(msg.data.split("\u001E")[0]) as BagiBagiDonation
 
         if (parsedData.type == 6) {
             socket.send(msg.data);
@@ -110,4 +75,11 @@ export default class BagiBagiAdapter extends Adapter<Promise<void>> {
             await queue.addDonationToQueue(donation);
         }
     }
+
+    socketCloseHandler = (listener: Listener, socket: WebSocket) => {
+        console.log("Disconnected from notification server");
+        listener.cleanup();
+        console.log("Reconnecting to notification server...");
+        this.init().then(() => listener.listen()).catch((e) => console.error(e));
+    };
 }

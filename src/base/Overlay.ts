@@ -10,6 +10,7 @@ export type ShowOverlayOptions = {
 
 interface IOverlay {
     htmlParent: Element
+    htmlConfig: Element
     donatorName: Element;
     amount: Element;
     message: Element;
@@ -27,12 +28,14 @@ interface IOverlay {
 
 export default class Overlay implements IOverlay {
     htmlParent: Element;
+    htmlConfig: Element;
     donatorName: Element;
     amount: Element;
     message: Element;
 
     constructor(htmlParent: Element) {
         this.htmlParent = htmlParent;
+        this.htmlConfig = document.querySelector('#config');
         this.initTemplate();
         this.donatorName = htmlParent.querySelector('#donatorName');
         this.amount = htmlParent.querySelector('#amount');

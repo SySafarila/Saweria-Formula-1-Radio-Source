@@ -3,7 +3,7 @@ import OverlayManager from "./base/OverlayManager";
 const overlayManager = new OverlayManager();
 overlayManager.init({
     overlayType: 'Formula 1',
-    provider: 'BagiBagi',
+    provider: 'Saweria',
     parentHtmlElement: document.querySelector('#overlay'),
-    sourceOverlayUrl: 'https://bagibagi.co/alertbox/0ZzTRCQsIE1qQ4Z3HANFdTZqTZbKoMga'
+    sourceOverlayUrl: 'https://saweria.co/widgets/alert?streamKey=a4cb06bb44033504e163d68c0d66f1e3'
 });
