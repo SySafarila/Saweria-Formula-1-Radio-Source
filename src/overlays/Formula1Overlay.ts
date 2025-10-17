@@ -1,6 +1,7 @@
 import Overlay, {ShowOverlayOptions} from "../base/Overlay";
 import startDelay from "../utils/delay";
 import queryString from "query-string";
+import Sound from "../utils/Sound";
 
 type TeamConstructor =
     | "ferrari"
@@ -187,6 +188,15 @@ export default class Formula1Overlay extends Overlay {
         this.intervals = [];
     }
 
+    private async playIncomingRadio() {
+        console.info("Play incoming radio");
+        try {
+            await Sound.playIncomingRadio()
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     async showOverlay(options: ShowOverlayOptions): Promise<void> {
         // set donation data
         this.donatorName.innerHTML = options.donation.donatorName
@@ -206,7 +216,15 @@ export default class Formula1Overlay extends Overlay {
         // start audio visual
         this.startAudioVisual();
 
-        await this.playTts(options.donation.textToSpeeches)
+        // play incoming radio
+        await this.playIncomingRadio();
+
+        // play tts
+        try {
+            await this.playTts(options.donation.textToSpeeches, true, true)
+        } catch (e) {
+            await startDelay(3000)
+        }
 
         // stop audio visual
         this.stopAudioVisual();

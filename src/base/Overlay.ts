@@ -92,14 +92,15 @@ export default class Overlay implements IOverlay {
         }
     }
 
-    async playTts(textToSpeeches: string[]) {
+    async playTts(textToSpeeches: string[], throwError: boolean = false, withRadioEffect: boolean = false) {
         if (textToSpeeches.length > 0) {
             for (const tts of textToSpeeches) {
                 try {
-                    await Sound.playTextToSpeech(tts);
+                    await Sound.playTextToSpeech(tts, withRadioEffect);
                     await startDelay(500);
                 } catch (e) {
                     console.error(e);
+                    if (throwError) throw e
                 }
             }
         }
