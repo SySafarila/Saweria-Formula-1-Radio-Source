@@ -55,6 +55,9 @@ export default class Formula1Overlay extends Overlay {
       class="p-2 grid grid-cols-2 md:grid-cols-3 w-full gap-2"
     >
       <input type="hidden" name="isConfigured" value="YES" />
+      <input type="hidden" name="sourceOverlay" value="${this._setting.sourceOverlayUrl}" />
+      <input type="hidden" name="provider" value="${this._setting.provider}" />
+      <input type="hidden" name="overlayType" value="${this._setting.overlayType}" />
       <div class="flex flex-col gap-1">
         <label for="driverNameInput">Driver Name</label>
         <input

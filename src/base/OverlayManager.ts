@@ -5,6 +5,7 @@ import Adapter from "./Adapter";
 import SaweriaAdapter from "../adapters/saweria/SaweriaAdapter";
 import Formula1Overlay from "../overlays/Formula1Overlay";
 import BagiBagiAdapter from "../adapters/bagibagi/BagiBagiAdapter";
+import Setting from "../core/Setting";
 
 type Provider = "Saweria" | "BagiBagi"
 type OverlayType = "Basic" | "Formula 1"
@@ -13,10 +14,22 @@ type Options = {
     overlayType: OverlayType;
     sourceOverlayUrl: string;
     parentHtmlElement: Element
+    setting: Setting;
 }
 
 export default class OverlayManager {
-    async init(options: Options) {
+    init() {
+        const setting = new Setting();
+        console.log(setting);
+        this.initOld({
+            overlayType: setting.overlayType as OverlayType,
+            provider: setting.provider as Provider,
+            sourceOverlayUrl: setting.sourceOverlayUrl,
+            setting: setting,
+            parentHtmlElement: document.querySelector('#overlay')
+        })
+    }
+    async initOld(options: Options) {
         console.info("Connecting...")
         const htmlElement = options.parentHtmlElement
         if (!htmlElement) throw new Error("No overlay element found");
@@ -40,10 +53,10 @@ export default class OverlayManager {
         let overlay: Overlay;
         switch (options.overlayType) {
             case "Basic":
-                overlay = new Overlay(htmlElement);
+                overlay = new Overlay(htmlElement, options.setting);
                 break;
             case "Formula 1":
-                overlay = new Formula1Overlay(htmlElement);
+                overlay = new Formula1Overlay(htmlElement, options.setting);
                 break;
             default:
                 throw new Error("Please choose supported overlay overlay type: Basic or Formula 1");

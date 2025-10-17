@@ -1,6 +1,7 @@
 import startDelay from "../utils/delay";
 import Donation from "./Donation";
 import Sound from "../utils/Sound";
+import Setting from "../core/Setting";
 
 export type ShowOverlayOptions = {
     delayToHide?: number
@@ -32,8 +33,10 @@ export default class Overlay implements IOverlay {
     donatorName: Element;
     amount: Element;
     message: Element;
+    _setting: Setting;
 
-    constructor(htmlParent: Element) {
+    constructor(htmlParent: Element, setting: Setting) {
+        this._setting = setting;
         this.htmlParent = htmlParent;
         this.htmlConfig = document.querySelector('#config');
         this.initTemplate();

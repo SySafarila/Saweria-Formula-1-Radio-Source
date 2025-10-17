@@ -7,8 +7,31 @@
     <title>Saweria Formula 1</title>
 </head>
 <body>
-<div class="hidden" id="config">
+<div id="config-master" class="p-5">
+    <form method="get" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <label for="sourceOverlay" class="font-semibold">Source Overlay</label>
+            <input type="text" class="border p-2" id="sourceOverlay" name="sourceOverlay"
+                   placeholder="https://saweria.co/widgets/alert?streamKey=a4cb06bb44033504e163d68c0d66f1e3" required/>
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="provider" class="font-semibold">Provider</label>
+            <select name="provider" id="provider" class="border p-2" required>
+                <option value="Saweria">Saweria</option>
+                <option value="BagiBagi">BagiBagi</option>
+            </select>
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="overlayType" class="font-semibold">Overlay Type</label>
+            <select name="overlayType" id="overlayType" class="border p-2" required>
+                <option value="Formula 1">Formula 1</option>
+                <option value="Basic">Basic</option>
+            </select>
+        </div>
+        <button type="submit" class="bg-green-500 p-2 text-white">Save</button>
+    </form>
 </div>
+<div class="hidden" id="config"></div>
 <div class="hidden" id="overlay">
 </div>
 <script src="./bundle.js"></script>
