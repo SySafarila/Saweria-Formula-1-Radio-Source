@@ -19,6 +19,7 @@ export default class Formula1Overlay extends Overlay {
     private intervals: NodeJS.Timeout[] = [];
     private teamConstructor: TeamConstructor = "ferrari";
     private driverName: string = "Syahrul";
+    private driverNumber: string = "1"
     private isConfigured: boolean = false;
 
     private setTeamConstructor() {
@@ -35,6 +36,13 @@ export default class Formula1Overlay extends Overlay {
         this.driverName = query.driverName ?? "Syahrul";
     }
 
+    private setDriverNumber() {
+        const query = queryString.parse(location.search) as {
+            driverNumber: string;
+        }
+        this.driverNumber = query.driverNumber ?? "1";
+    }
+
     private checkIsConfigured() {
         const query = queryString.parse(location.search) as {
             isConfigured: "YES" | "NO";
@@ -45,6 +53,7 @@ export default class Formula1Overlay extends Overlay {
     initTemplate() {
         this.setTeamConstructor();
         this.setDriverName();
+        this.setDriverNumber()
         this.checkIsConfigured()
 
         if (!this.isConfigured) {
@@ -68,6 +77,18 @@ export default class Formula1Overlay extends Overlay {
           class="border border-black rounded px-5 py-3"
           placeholder="Driver Name"
           value="Denaldi"
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="driverNumberInput">Driver Number</label>
+        <input
+          type="text"
+          name="driverNumber"
+          id="driverNumberInput"
+          class="border border-black rounded px-5 py-3"
+          placeholder="1"
+          value="1"
           required
         />
       </div>
@@ -107,28 +128,33 @@ export default class Formula1Overlay extends Overlay {
       <div class="bg-driver">
         <div class="flex flex-col items-end w-full p-4 gap-2">
           <span
-            class="uppercase font-f1-bold font-bold text-4xl italic break-words text-right leading-none"
+            class="uppercase font-f1-bold text-4xl break-words text-right leading-none"
             id="driver-name"
+            style="font: 900 2rem/2.375rem Formula1; -webkit-text-stroke: 2px inherit; font-weight: 100;"
             >${this.driverName}</span
           >
           <div class="flex items-center gap-x-2 w-full justify-end">
-            <img
-              src="./images/${this.teamConstructor}.svg"
-              alt="${this.teamConstructor}"
-              id="constructor"
-              data-constructor="${this.teamConstructor}"
-            />
             <span
-              class="uppercase text-white font-f1-bold font-bold -mt-[6px] text-4xl italic text-right break-words leading-none"
+              class="uppercase text-white font-f1-bold font-bold -mt-[6px] text-4xl text-right break-words leading-none"
               id="driver-radio"
+              style="font: 900 2rem/2.375rem Formula1;"
               >Radio</span
             >
           </div>
         </div>
         <div
-          class="audio-visual flex justify-between pb-2 px-4 items-end gap-[.3rem] md:gap-4"
+          class="audio-visual flex gap-[2px] items-end justify-between relative"
           id="audio-visual"
         >
+          <span id="driver-number" class="absolute left-6 top-4 !text-8xl z-[5]" style="font: 900 2rem/2.375rem Formula1; filter: drop-shadow(2px 4px 6px #17181e);">${this.driverNumber}</span>
+          <img
+              src="./images/${this.teamConstructor}.svg"
+              alt="${this.teamConstructor}"
+              id="constructor"
+              data-constructor="${this.teamConstructor}"
+              class="absolute z-[5] top-2 right-8 h-24 max-w-40"
+              style="filter: drop-shadow(2px 4px 6px #17181e);"
+          />
           <div class="transition-all max-h-[50%]" id="h-1"></div>
           <div class="transition-all max-h-[60%]" id="h-2"></div>
           <div class="transition-all max-h-[70%]" id="h-3"></div>
@@ -147,13 +173,15 @@ export default class Formula1Overlay extends Overlay {
       </div>
       <div class="bg-message flex flex-col gap-4">
         <p
-          class="uppercase text-left text-white text-xl italic p-4 pb-0 font-semibold break-words w-[95%] mr-auto leading-none"
+          class="text-left text-white text-xl p-4 pb-0 font-semibold break-words w-[95%] mr-auto leading-none"
+          style="font: 400 1.2rem / 2.375rem Formula1;"
           id="donation"
         >
           "<span id="donatorName">Donator Name</span> <span id="amount"></span>"
         </p>
         <p
-          class="uppercase text-right text-xl italic p-4 pt-0 font-semibold break-words w-[95%] ml-auto leading-none"
+          class="text-right text-xl p-4 pt-0 font-semibold break-words w-[95%] ml-auto leading-none"
+          style="font: 400 1.2rem / 2.375rem Formula1;"
           id="message"
         >
           "Man, the aplhatauri is such an idiot"

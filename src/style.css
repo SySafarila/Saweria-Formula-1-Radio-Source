@@ -1,20 +1,21 @@
+@import url("https://www.formula1.com/s/fonts.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer components {
     .bg-message {
-        background: rgb(13, 17, 25);
-        background: linear-gradient(0deg, rgba(13, 17, 25, 1) 90%, rgba(60, 60, 66, 1) 100%);
+        @apply bg-[#17181e];
     }
 
     .bg-driver {
-        background: rgb(13, 17, 25);
-        background: linear-gradient(0deg, rgba(13, 17, 25, 1) 73%, rgba(60, 60, 66, 1) 100%);
+        background: #17181E;
+        background: linear-gradient(0deg, #17181e 63%, #1e2027);
     }
 
     .audio-visual {
-        height: 4rem;
+        height: 8rem;
     }
 
     .audio-visual>div {
@@ -37,12 +38,16 @@
     @apply overflow-hidden m-2;
 }
 
-#radio #constructor {
-    @apply hidden h-8;
-}
+/*#radio #constructor {*/
+/*    @apply hidden h-8;*/
+/*}*/
 
 /* ferrari */
 #radio.ferrari #driver-name {
+    @apply text-ferrari;
+}
+
+#radio.ferrari #driver-number {
     @apply text-ferrari;
 }
 
@@ -67,6 +72,10 @@
     @apply text-mercedes;
 }
 
+#radio.mercedes #driver-number {
+    @apply text-mercedes;
+}
+
 #radio.mercedes #constructor[data-constructor="mercedes"] {
     @apply block;
 }
@@ -85,6 +94,10 @@
 
 /* redbull */
 #radio.redbull #driver-name {
+    @apply text-redbull;
+}
+
+#radio.redbull #driver-number {
     @apply text-redbull;
 }
 
@@ -109,6 +122,10 @@
     @apply text-mclaren;
 }
 
+#radio.mclaren #driver-number {
+    @apply text-mclaren;
+}
+
 #radio.mclaren #constructor[data-constructor="mclaren"] {
     @apply block;
 }
@@ -127,6 +144,10 @@
 
 /* aston-martin */
 #radio.aston-martin #driver-name {
+    @apply text-aston-martin;
+}
+
+#radio.aston-martin #driver-number {
     @apply text-aston-martin;
 }
 
@@ -151,6 +172,10 @@
     @apply text-haas;
 }
 
+#radio.haas #driver-number {
+    @apply text-haas;
+}
+
 #radio.haas #constructor[data-constructor="haas"] {
     @apply block;
 }
@@ -169,6 +194,10 @@
 
 /* rb */
 #radio.rb #driver-name {
+    @apply text-rb;
+}
+
+#radio.rb #driver-number {
     @apply text-rb;
 }
 
@@ -193,6 +222,10 @@
     @apply text-williams;
 }
 
+#radio.williams #driver-number {
+    @apply text-williams;
+}
+
 #radio.williams #constructor[data-constructor="williams"] {
     @apply block p-1;
 }
@@ -214,6 +247,10 @@
     @apply text-alpine;
 }
 
+#radio.alpine #driver-number {
+    @apply text-alpine;
+}
+
 #radio.alpine #constructor[data-constructor="alpine"] {
     @apply block p-1;
 }
@@ -232,6 +269,10 @@
 
 /* sauber */
 #radio.sauber #driver-name {
+    @apply text-sauber;
+}
+
+#radio.sauber #driver-number {
     @apply text-sauber;
 }
 
